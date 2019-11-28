@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <form action="" method = "post">
+                    {% csrf_token %}
+                    {{user_form|crispy}}
+                    {{volunteer_form|crispy}}
+                    <input type="submit" name="addvolunteer" value="Signup ">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

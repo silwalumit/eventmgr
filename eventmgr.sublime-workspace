@@ -1,0 +1,560 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tra",
+				"transaction\tabc"
+			],
+			[
+				"uni",
+				"unique_slug_gen\tfunction"
+			],
+			[
+				"pre",
+				"pre_save\tmodule"
+			],
+			[
+				"re",
+				"receiver\tmodule"
+			],
+			[
+				"unique",
+				"unique_slug_gen\tabc"
+			],
+			[
+				"rand",
+				"ramdom_str_gen\tabc"
+			],
+			[
+				"slug",
+				"slug_field\tabc"
+			],
+			[
+				"Or",
+				"Organization\tclass"
+			],
+			[
+				"Organ",
+				"OrganizationSignUp\tabc"
+			],
+			[
+				"inputs",
+				"inputs\tinput - submit"
+			],
+			[
+				"Logi",
+				"Login\tclass"
+			],
+			[
+				"rever",
+				"reverse_lazy\tabc"
+			],
+			[
+				"Login",
+				"LoginView\tabc"
+			],
+			[
+				"tem",
+				"template_name\t(views.py)"
+			],
+			[
+				"form",
+				"forms\tabc"
+			],
+			[
+				"vou",
+				"vlounteer\tabc"
+			],
+			[
+				"temp",
+				"template\t(views.py)"
+			],
+			[
+				"urls",
+				"urlpatterns\t(urls.py)"
+			],
+			[
+				"Bas",
+				"BaseMultiFormsView\tabc"
+			],
+			[
+				"Procee",
+				"ProcessMutliFormsView\tabc"
+			],
+			[
+				"forms",
+				"forms_invalid"
+			],
+			[
+				"cla",
+				"class\tNew Class"
+			],
+			[
+				"Imp",
+				"ImproperlyConfigured\tmodule"
+			],
+			[
+				"Htt",
+				"HttpResponseRedirect\tmodule"
+			],
+			[
+				"get",
+				"get_form_classes\tfunction"
+			],
+			[
+				"admin",
+				"admin\tmodule"
+			],
+			[
+				"User",
+				"User\tclass"
+			],
+			[
+				"model",
+				"models\tmodule"
+			],
+			[
+				"ch",
+				"choices"
+			],
+			[
+				"mode",
+				"models\tmodule"
+			],
+			[
+				"max",
+				"max_length\tabc"
+			],
+			[
+				"reder",
+				"redirect\tmodule"
+			],
+			[
+				"url",
+				"urlsafe_base64_decode\tabc"
+			],
+			[
+				"render",
+				"render_to_string\tabc"
+			],
+			[
+				"Create",
+				"CreateView\tmodule"
+			],
+			[
+				"Account",
+				"AccountActivationTokenGenerator\tclass"
+			],
+			[
+				"log",
+				"login_view\tfunction"
+			],
+			[
+				"Pass",
+				"PasswordInput"
+			],
+			[
+				"a",
+				"a\t<a>"
+			],
+			[
+				"htm",
+				"html5\tSimple HTML5 Boilerplate"
+			],
+			[
+				"PASSWORD",
+				"PASSWORD_RESET_TIMEOUT_DAYS"
+			],
+			[
+				"LOG",
+				"LOGOUT_URL"
+			],
+			[
+				"LOGIN",
+				"LOGIN_REDIRECT_URL"
+			],
+			[
+				"STATIC",
+				"STATICFILES_DIRS"
+			],
+			[
+				"MEDA",
+				"MEDIA_ROOT"
+			],
+			[
+				"os",
+				"os.path.join\tabc"
+			],
+			[
+				"ht",
+				"html5\tSimple HTML5 Boilerplate"
+			],
+			[
+				"med",
+				"MEDIA_URL"
+			],
+			[
+				"passw",
+				"PASSWORD_RESET_TIMEOUT_DAYS"
+			],
+			[
+				"Abs",
+				"AbstractBaseUser\tmodule"
+			],
+			[
+				"static",
+				"static_cdn\tabc"
+			],
+			[
+				"BSe",
+				"BASE_DIR\tabc"
+			],
+			[
+				"base",
+				"BASE_DIR\tstatement"
+			],
+			[
+				"STAT",
+				"STATIC_ROOT"
+			],
+			[
+				"MEDIA",
+				"MEDIA_URL"
+			],
+			[
+				"cl",
+				"class\tNew Class"
+			],
+			[
+				"class",
+				"classmethod\tclass"
+			],
+			[
+				"pa",
+				"path\tmodule"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Djan",
+				"Set Syntax: Python (Django)"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: re",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: Ins",
+				"Package Control: Install Package"
+			],
+			[
+				"terminus",
+				"Preferences: Terminal Key Bindings – User"
+			],
+			[
+				"terminus:",
+				"Terminus: Open Default Shell in Panel"
+			],
+			[
+				"Package Control: Install ",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"ANF: New File"
+			],
+			[
+				"Package Control: Install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: I",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: i",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 150.0,
+		"history":
+		[
+			"terminus",
+			"python manage.py runserver",
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) ",
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/umit/Desktop/eventmgr"
+	],
+	"file_history":
+	[
+		"/home/umit/Desktop/eventmgr/eventmanager/users/models.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/eventmanager/settings.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/forms.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/views.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/core/utils.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/admin.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/migrations/0001_initial.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/migrations/0002_auto_20191128_2150.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/templates/base.html",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/templates/registration/login.html",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/urls.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/templates/organization/signup.html",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/templates/volunteer/signup.html",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/migrations/0003_auto_20191128_2107.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/migrations/0001_squashed_0003_auto_20191126_1546.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/static/css/style.css",
+		"/home/umit/Desktop/eventmgr/eventmanager/static/js/base.js",
+		"/home/umit/Desktop/eventmgr/eventmanager/core/views.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/eventmanager/urls.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/migrations/0002_auto_20191126_1548.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/migrations/0003_auto_20191126_1546.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/models/organization.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/models/volunteers.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/models/__init__.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/models/users.py",
+		"/home/umit/Desktop/eventmgr/eventmanager/users/models",
+		"/home/umit/Desktop/eventmgr/eventmanager/manage.py",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/home.html",
+		"/home/umit/Desktop/ebook_store/bookstore/users/models.py",
+		"/home/umit/Desktop/ebook_store/bookstore/books/models.py",
+		"/home/umit/Desktop/ebook_store/bookstore/users/views.py",
+		"/home/umit/Desktop/ebook_store/bookstore/users/forms.py",
+		"/home/umit/Desktop/create_event.mdj",
+		"/home/umit/Desktop/ebook_store/bookstore/books/migrations/0001_initial.py",
+		"/home/umit/Desktop/ebook_store/bookstore/books/migrations/0002_auto_20190829_2145.py",
+		"/home/umit/Desktop/ebook_store/bookstore/bookstore/settings.py",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/users/login.html",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/base.html",
+		"/home/umit/Desktop/ebook_store/bookstore/users/urls.py",
+		"/home/umit/Desktop/ebook_store/bookstore/users/admin.py",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/users/account_activation.html",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/users/activation_sent.html",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/users/signup.html",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/users/account_activation_invalid.html",
+		"/home/umit/Desktop/ebook_store/bookstore/users/tokens.py",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/registration/login.html",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/registration/signup.html",
+		"/home/umit/Desktop/practicals/opengl/triangle.cpp",
+		"/home/umit/Desktop/ebook_store/bookstore/bookstore/urls.py",
+		"/home/umit/Desktop/ebook_store/bookstore/templates/index.html",
+		"/home/umit/.config/sublime-text-3/Packages/Djaneiro/Settings/HTML (Django).sublime-settings",
+		"/home/umit/.config/sublime-text-3/Packages/Djaneiro/Settings/Python (Django).sublime-settings",
+		"/home/umit/.config/sublime-text-3/Packages/Terminal/Terminal.sublime-settings",
+		"/home/umit/Desktop/ebook_store/bookstore/books/urls.py",
+		"/home/umit/Desktop/ebook_store/bookstore/dashboard/urls.py",
+		"/media/umit/Files/projects/ebook_store/bookstore/users/admin.py",
+		"/home/umit/Desktop/practicals/osd/index.html",
+		"/home/umit/Desktop/practicals/osd/sum_of_n_numbers.pl",
+		"/media/umit/Files/projects/ebook_store/bookstore/users/models.py",
+		"/media/umit/Files/projects/ebook_store/.gitignore",
+		"/home/umit/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/media/umit/Files/projects/ebook_store/book_store",
+		"/media/umit/Files/BCS/OSD/Resources/2_WebServer Setup/php/10_sort_array.php",
+		"/media/umit/Files/BCS/OSD/Resources/2_WebServer Setup/php/14_fileupload.php",
+		"/media/umit/Files/projects/ebook_store/bookstore/bookstore/settings.py",
+		"/media/umit/Files/BCS/OSD/Resources/2_WebServer Setup/php/13_request.php",
+		"/media/umit/Files/BCS/OSD/Resources/2_WebServer Setup/mysql/1_import_db.php",
+		"/home/umit/Desktop/practicals/osd/subtract/EngienCompute.java",
+		"/home/umit/Desktop/practicals/opengl/lineEquations.cpp",
+		"/home/umit/Desktop/main.cpp",
+		"/media/umit/Files/projects/django_projects/project_blog/blog/accounts/admin.py",
+		"/media/umit/Files/projects/django_projects/project_blog/blog/accounts/models.py",
+		"/media/umit/Files/projects/django_projects/project_blog/blog/blog/urls.py",
+		"/media/umit/Files/projects/django_projects/project_blog/blog/blog/wsgi.py",
+		"/media/umit/Files/projects/django_projects/project_blog/blog/accounts/apps.py",
+		"/media/umit/Files/projects/django_projects/project_blog/blog/blog/settings.py",
+		"/media/umit/Files/projects/django_projects/blog/blog/posts/migrations/0001_initial.py",
+		"/media/umit/Files/projects/django_projects/blog/blog/db.sqlite3",
+		"/media/umit/Files/projects/django_projects/blog/blog/posts/templates/posts/base.html",
+		"/home/umit/Desktop/main.py",
+		"/home/umit/Desktop/index.html",
+		"/home/umit/.config/sublime-text-3/Packages/User/AdvancedNewFile.sublime-settings",
+		"/home/umit/Desktop/script.js",
+		"/home/umit/.config/sublime-text-3/Packages/JavaScript Completions/Default (Linux).sublime-keymap",
+		"/home/umit/.config/sublime-text-3/Packages/JavaScript Completions/JavaScript-Completions.sublime-settings"
+	],
+	"find":
+	{
+		"height": 49.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"eventmanagement",
+			"backend"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"eventmanager"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 37.0
+	},
+	"input":
+	{
+		"height": 55.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 156.0
+	},
+	"output.Terminus":
+	{
+		"height": 225.0
+	},
+	"output.Terminus 2":
+	{
+		"height": 156.0
+	},
+	"output.Terminus 3":
+	{
+		"height": 156.0
+	},
+	"output.Terminus 4":
+	{
+		"height": 163.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "eventmgr.sublime-project",
+	"replace":
+	{
+		"height": 70.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Desktop/ebook_store/bookstore.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 296.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
