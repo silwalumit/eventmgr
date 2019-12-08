@@ -17,7 +17,7 @@ Installation and environment setup
 6. install libraries:
   pip install django-crispy-forms
 7. install mysql database 
-8. run command in cmd
+8. run command in cmd:
   pip install django mysqlclient
 9. create user and password in mysql
  
