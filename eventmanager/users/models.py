@@ -76,7 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 @receiver(pre_save, sender = User)
 def set_slug(sender, instance, **kwargs):
-    instance.slug = unique_slug_gen(instance, instance.username)
+    instance.slug = unique_slug_gen(instance, instance.email)
 
 class Volunteer(models.Model):
     MALE = "M"

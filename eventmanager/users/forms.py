@@ -8,7 +8,7 @@ user = get_user_model
 class VolunteerCreationForm(forms.ModelForm):
     class Meta:
         model = Volunteer
-        exclude = ('user', )
+        exclude = ('user', 'middle_name', 'gender')
 
 class UserCreationForm(AuthUserCreationForm):
     class Meta:

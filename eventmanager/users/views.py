@@ -3,9 +3,18 @@ from django.shortcuts import render
 from django.db import transaction
 from django.urls import reverse_lazy
 from core.views import MultiFormsView
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 # Create your views here.
 
+class Login(LoginView):
+    success_url= reverse_lazy("home")
+
+    def get_success_url(self):
+        return self.success_url
+         
+class Logout(LogoutView):
+    next_page = reverse_lazy("home")
+    
 class VolunteerSignUp(MultiFormsView):
     extra_content = {
         "title":"Volunteer's Sign Up"
@@ -29,9 +38,6 @@ class VolunteerSignUp(MultiFormsView):
         volunteer.user = user
         volunteer.save()
         return super().forms_valid(forms)
-
-class Login(LoginView):
-    success_url= reverse_lazy("home")
 
 class OrganizationSignUp(MultiFormsView):
     """Sign up view for organizations"""
