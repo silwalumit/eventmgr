@@ -6,16 +6,42 @@ from django.contrib.auth import get_user_model
 user = get_user_model
 
 class VolunteerCreationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class':'form-control-sm'})
+    
     class Meta:
         model = Volunteer
-        exclude = ('user', 'middle_name', 'gender')
+        fields = ('first_name','last_name',)
 
 class UserCreationForm(AuthUserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class':'form-control-sm'})
+    
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = ("email", )
 
-class OrganizationCreationForm(forms.ModelForm):
+class OrganizerCreationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class':'form-control-sm'})
+    
     class Meta:
-        model = Organization
+        model = Organizer
         exclude = ('user', )
+
+class ContactsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class':'form-control-sm'})
+
+    class Meta:
+        model = OrganizationContact
+        exclude = ('organizer',)

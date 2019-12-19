@@ -6,8 +6,9 @@
             <div class="col-4">
                 <form action="" method = "post">
                     {% csrf_token %}
-                    {{organization_form|crispy}}
-                    {{user_form|crispy}}
+                    {{organizer|crispy}}
+                    {{user|crispy}}
+                    {{contact|crispy}}
                     <input type="submit" name="addvolunteer" value="Signup ">
                 </form>
             </div>

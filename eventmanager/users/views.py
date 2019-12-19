@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.db import transaction
 from django.urls import reverse_lazy
 from core.views import MultiFormsView
+from django.views.generic.edit import FormView
 from django.contrib.auth.views import LoginView, LogoutView
-# Create your views here.
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class Login(LoginView):
     success_url= reverse_lazy("home")
@@ -12,7 +13,7 @@ class Login(LoginView):
     def get_success_url(self):
         return self.success_url
          
-class Logout(LogoutView):
+class Logout(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy("home")
     
 class VolunteerSignUp(MultiFormsView):
@@ -21,46 +22,58 @@ class VolunteerSignUp(MultiFormsView):
     }
     template_name = "volunteer/signup.html"
     form_classes = {
-        "user_form":UserCreationForm,
-        "volunteer_form": VolunteerCreationForm
+        "user":UserCreationForm,
+        "volunteer": VolunteerCreationForm
     }
 
     prefix = {
-        "user_form":"user",
-        "volunteer_form":"volunteer"
+        "user":"user",
+        "volunteer":"volunteer"
     }
     success_url = reverse_lazy("home")
 
     @transaction.atomic
     def forms_valid(self, forms):
-        user = forms['user_form'].save()
-        volunteer = forms['volunteer_form'].save(commit = False)
+        user = forms['user'].save()
+        volunteer = forms['volunteer'].save(commit = False)
         volunteer.user = user
         volunteer.save()
         return super().forms_valid(forms)
 
-class OrganizationSignUp(MultiFormsView):
+class OrganizerSignUp(MultiFormsView):
     """Sign up view for organizations"""
     extra_content = {
-        "title":"Organization's Sign Up"
+        "title":"Organizer's Sign Up"
     }
-    template_name = "organization/signup.html"
+    template_name = "organizer/signup.html"
     form_classes = {
-        "user_form":UserCreationForm,
-        "organization_form": OrganizationCreationForm
+        "user":UserCreationForm,
+        "organizer": OrganizerCreationForm,
+        "contact": ContactsForm,
     }
 
     prefix = {
-        "user_form":"user",
-        "organization_form":"organization"
+        "user":"user",
+        "organizer":"organizer",
+        "contact":"contact-detail"
     }
     success_url = reverse_lazy("home")
 
     @transaction.atomic
     def forms_valid(self, forms):
-        user = forms['user_form'].save()
-        volunteer = forms['organization_form'].save(commit = False)
-        volunteer.user = user
-        volunteer.save()
+        user = forms['user'].save(commit = False)
+        user.is_volunteer = False
+        user.save()
+
+        organizer = forms['organizer'].save(commit = False)
+        organizer.user = user
+        organizer.save()
+
+        contact = forms['contact'].save(commit = False)
+        contact.organizer = organizer
+        contact.save()
         return super().forms_valid(forms)
+
+class EditOrganizationProfile(LoginRequiredMixin, MultiFormsView):
+
 

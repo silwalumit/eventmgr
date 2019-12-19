@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.mail import send_mail
-
+from django.core.validators import RegexValidator
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 
@@ -12,6 +12,9 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 from core.utils import unique_slug_gen
+
+def upload_dir(instance, fielname):
+    return "user_{0}_{1}".format(instance.id, fielname)
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -47,15 +50,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length = 255,
         unique = True,
     )
-    username = models.CharField(
-        verbose_name = _('user name'),
-        max_length = 255,
-    )
+
     is_active = models.BooleanField(_('active'),default = False)
-    # avatar = models.ImageField(upload_to = 'avatars', null = True, blank = True)
+    is_volunteer = models.BooleanField(default = True)
+    avatar = models.ImageField(
+        upload_to = upload_dir, 
+        null = True, 
+        blank = True,
+    )
     slug = models.SlugField()
     USERNAME_FIELD = 'email'
-    REQURED_FIELDS = ['username', 'email', 'passsword',]
+    REQURED_FIELDS = ['email', 'passsword',]
 
     @property
     def is_staff(self):
@@ -74,57 +79,88 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email = None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-@receiver(pre_save, sender = User)
-def set_slug(sender, instance, **kwargs):
-    instance.slug = unique_slug_gen(instance, instance.email)
-
 class Volunteer(models.Model):
-    MALE = "M"
-    FEMALE = "F"
-    OTHERS = "O"
-
-    SEX_CHOICES = (
-        (MALE, "Male"),
-        (FEMALE, "Female"),
-        (OTHERS, "Others")
-    )
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE,
     )
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    middle_name = models.CharField(
-        max_length=50, 
+    first_name = models.CharField(
+        verbose_name = _("first name"), 
+        max_length=50
+    )
+    last_name = models.CharField(
+        verbose_name = _("last name"),
+        max_length=50
+    )
+    
+    dob = models.DateField(
+        verbose_name = _("date of birth"),
         null = True, 
-        blank = True
+        blank = True,
     )
-    gender = models.CharField(
-        max_length=1,
-        choices=SEX_CHOICES
+    bio = models.TextField(
+        verbose_name = _("biography"),
+        null = True, blank = True
     )
+    contact_no = models.CharField(
+        null  = True,
+        blank = True,
+        max_length=10,
+        verbose_name = _("contact no"),
+        validators = [
+            RegexValidator(
+                regex = r'^\d{6,10}$', 
+                message = "Contact number must contain digits only. Up to 10 digits allowed."
+            )] 
+    )
+
     @property
     def name(self):
         return self.__str__()
     
     def __str__(self):
-        if self.middle_name:
-            return self.first_name + " " + self.middle_name\
-             + " " + self.last_name
         return self.first_name + " " + self.last_name
 
-    def get_absolute_url(self):
-        pass
-
-class Organization(models.Model):
+class Organizer(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE,
     )
+    
     name = models.CharField(
         max_length=100,
         unique = True,
         verbose_name = _("name of organization")
     )
-    def get_absolute_url(self):
-        pass
+    description = models.TextField()
+
+
+class OrganizationContact(models.Model):
+    organizer = models.OneToOneField(
+        Organizer,
+        related_name='contact',
+        related_query_name ='contact',
+        on_delete = models.CASCADE,
+    )
+    primary_no = models.CharField(
+        max_length=10,
+        verbose_name = _("primary contact no"),
+        validators = [RegexValidator(regex = r'^\d{6,10}$')] 
+    )
+
+    secondary_no = models.CharField(
+        max_length=10,
+        null = True,
+        blank = True,
+        verbose_name = _("secondary contact no"),
+        validators = [RegexValidator(regex = r'^\d{6,10}$')] 
+    )
+
+    website = models.URLField(null = True, blank = True)
+    facebook = models.URLField(null = True, blank = True)
+    twitter = models.URLField(null = True, blank = True)
+    instagram = models.URLField(null = True, blank = True)
+
+@receiver(pre_save, sender = User)
+def set_slug(sender, instance, **kwargs):
+    instance.slug = unique_slug_gen(instance, instance.email.split('@')[0])

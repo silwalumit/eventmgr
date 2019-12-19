@@ -5,12 +5,12 @@ from users.models import *
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ('email', 'username', 'is_active', 'is_superuser')
+    list_display = ('email', 'is_active', 'is_superuser')
     list_filter = ('is_superuser',)
 
     fieldsets = (
         (None, {'fields':('password', 'slug')}),
-        ('Personal Info', {'fields':('email','username',)}),
+        ('Personal Info', {'fields':('email',)}),
         ('Permissions',{'fields':('is_superuser', 'is_active')}),
     )
     
@@ -20,8 +20,8 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
-    list_display = ['user', 'first_name', 'last_name', 'gender']
+    list_display = ['user', 'first_name', 'last_name',]
 
-@admin.register(Organization)
-class OrganizationAdmin(admin.ModelAdmin):
+@admin.register(Organizer)
+class OrganizerAdmin(admin.ModelAdmin):
     list_display = ['user', 'name']

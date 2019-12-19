@@ -9,5 +9,5 @@ urlpatterns = [
     path("logout/", Logout.as_view(), name = "logout"),
     path("signup/", TemplateView.as_view(template_name = "registration/signup.html"), name = "signup"),
     path('signup/volunteer/', VolunteerSignUp.as_view(), name = "signup_volunteer"),
-    path('signup/org/', OrganizationSignUp.as_view(), name = "signup_org"),
+    path('signup/org/', OrganizerSignUp.as_view(), name = "signup_org"),
 ]
