@@ -1,0 +1,11 @@
+<div class="form-row">    
+    <a href="{% url 'user:signup_org' %}" class="col-12 p-5 btn btn-success show-form" title = "Organizer Sign Up" data-class = "">Organizer Signup</a>        
+    <a href="{% url 'user:signup_volunteer' %}" class="col-12 p-5 mt-2 btn btn-primary show-form" title = "Volunteer Sign Up" data-class = "">Volunteer Signup</a>
+
+    <div class="col-12">
+        <span class = "text-muted small">
+            Already have an ID?
+            <a class = "show-form" title = "Sign In" data-class = "modal-sm" href="{% url 'user:login' %}">Click here</a> to sign in.
+        </span>
+    </div>
+</div>

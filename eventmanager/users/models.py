@@ -163,4 +163,5 @@ class OrganizationContact(models.Model):
 
 @receiver(pre_save, sender = User)
 def set_slug(sender, instance, **kwargs):
-    instance.slug = unique_slug_gen(instance, instance.email.split('@')[0])
+    if not instance.slug:
+        instance.slug = unique_slug_gen(instance, instance.email.split('@')[0])
