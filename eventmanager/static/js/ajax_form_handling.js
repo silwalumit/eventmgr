@@ -17,6 +17,7 @@ $(function () {
                         });
                         ajaxFormSubmit(form, modal);
                     } else {
+                        window.location = "/"
                         $(modal).modal('toggle');
                     }
                 },

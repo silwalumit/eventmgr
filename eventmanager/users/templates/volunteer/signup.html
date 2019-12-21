@@ -2,9 +2,14 @@
 <form action="{% url 'user:signup_volunteer' %}" method = "post">
     <div class="form-row">
         {% csrf_token %}
-        {{volunteer|crispy}}
-        {{user|crispy}}
-        <input type="submit" name="addvolunteer" value="Signup" />    
+        <div class="col-12">{{volunteer.first_name|as_crispy_field}}</div>
+        <div class="col-12">{{volunteer.last_name|as_crispy_field}}</div>
+        <div class="col-12">{{user.email|as_crispy_field}}</div>
+        <div class="col-12">{{user.password1|as_crispy_field}}</div>
+        <div class="col-12">{{user.password2|as_crispy_field}}</div>
+        <div class="col-auto ml-auto">
+            <input type="submit" name="addvolunteer" class = "btn btn-success" value="Sign Up" />    
+        </div>
     </div>
 </form>
 

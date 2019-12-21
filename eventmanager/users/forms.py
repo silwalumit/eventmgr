@@ -32,8 +32,11 @@ class VolunteerCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["first_name"].widget.attrs.update({'placeholder':'first name'})
+        self.fields["last_name"].widget.attrs.update({'placeholder':'last name'})
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class':'form-control-sm'})
+            self.fields[field].label=''
+            
     
     class Meta:
         model = Volunteer
@@ -42,8 +45,16 @@ class VolunteerCreationForm(forms.ModelForm):
 class UserCreationForm(AuthUserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        placeholder = "email"
+        
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class':'form-control-sm'})
+            self.fields[field].label = ''
+            if field == 'password1':
+                placeholder = "password"
+            elif field == 'password2':
+                placeholder = "confirm password"
+            self.fields[field].widget.attrs.update({'placeholder':placeholder})
     
     class Meta:
         model = User
