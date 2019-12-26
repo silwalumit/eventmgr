@@ -1,14 +1,34 @@
-from django.shortcuts import render
 from django.db import transaction
 from django.urls import reverse_lazy, reverse
+from django.contrib import messages
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
 
-from django.views.generic.edit import FormView
+from django.utils.http import (
+    urlsafe_base64_encode, 
+    urlsafe_base64_decode
+)
+
+from django.utils.encoding import force_bytes, force_text
+
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 
 from .forms import *
 from core.views import MultiFormsView, AjaxResponseMixin
+
+from users.tokens import account_activation_token
+from django.views.generic import View
+
+from django.contrib.auth import (
+    # authenticate, 
+    get_user_model, 
+    login, 
+    # logout
+)
+
+User = get_user_model()
 
 class Login(AjaxResponseMixin, LoginView):
     success_url= reverse_lazy("home")
@@ -54,6 +74,24 @@ class VolunteerSignUp(AjaxResponseMixin, MultiFormsView):
         volunteer = forms['volunteer'].save(commit = False)
         volunteer.user = user
         volunteer.save()
+        
+        current_site = get_current_site(self.request)
+        subject = "Activate your Come and Volunteer Account"
+
+        message = render_to_string(
+            'registration/account_activation.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            }
+        )
+
+        user.email_user(subject, message)
+
+        message = "Thank you for registering with us. An activation link is sent to {0}. Please confirm you email.".format(user.email)
+
+        messages.success(self.request, message)
         return super().forms_valid(forms)
 
 class OrganizerSignUp(AjaxResponseMixin,MultiFormsView):
@@ -97,6 +135,22 @@ class OrganizerSignUp(AjaxResponseMixin,MultiFormsView):
         contact.organizer = organizer
         contact.save()
         return super().forms_valid(forms)
+
+class ActivateAccount(View):
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk = uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            login(request, user)
+            messages.success(request, "Congratulations! Your account have been confirmed.")
+        else:
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
+        return HttpResponseRedirect(reverse("home"))
 
 # class EditOrganizationProfile(LoginRequiredMixin, MultiFormsView):
 

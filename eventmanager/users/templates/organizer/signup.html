@@ -1,10 +1,36 @@
 {% load crispy_forms_tags %}
 
 <form action="{% url 'user:signup_org' %}" method = "post">
-
+    
     {% csrf_token %}
     {{organizer|crispy}}
-    {{user|crispy}}
-    {{contact|crispy}}
-    <input type="submit" name="addvolunteer" value="Sign Up" class = "btn btn-success"/>
+    
+    <div class="form-row">
+        <strong class = "w-100 mb-2 font-weight-bolder small">
+            Contact Details
+        </strong>
+        <div class="col-6">{{contact.primary_no|as_crispy_field}}</div>
+        <div class="col-6">{{contact.secondary_no|as_crispy_field}}</div>
+        <div class="col-12">{{contact.website|as_crispy_field}}</div>
+        <div class="col-12">{{contact.facebook|as_crispy_field}}</div>
+        <div class="col-12">{{contact.twitter|as_crispy_field}}</div>
+        <div class="col-12">{{contact.instagram|as_crispy_field}}</div>
+    </div>
+
+    <div class="form-row">
+        <strong class = "w-100 mb-2 font-weight-bolder small">
+            Authentication Details
+        </strong>
+        <div class="col-12">{{user.email|as_crispy_field}}</div>
+        <div class="col-12 mb-2">{{user.password1}}</div>
+        <div class="col-12">{{user.password2|as_crispy_field}}</div>
+    </div>
+    <div class="modal-footer">
+       
+            <input type="submit" name="addvolunteer" value="Sign Up" class = "btn btn-success"/>
+        
+            <button type="button" name="close" class = "btn btn-secondary" data-dismiss="modal">Close</button>
+      
+    </div>
+    
 </form>

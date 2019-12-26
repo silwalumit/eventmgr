@@ -1,6 +1,11 @@
+
 .border-2 {
     border-width:2px !important;
 }
 ul{
     list-style-type: none !important;
+}
+
+.form-group{
+    margin-bottom: 5px !important;
 }

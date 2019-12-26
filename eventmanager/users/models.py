@@ -83,6 +83,8 @@ class Volunteer(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE,
+        related_name = "volunteer",
+        related_query_name = "volunteer"
     )
     first_name = models.CharField(
         verbose_name = _("first name"), 
@@ -125,6 +127,8 @@ class Organizer(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE,
+        related_name = "organizer",
+        related_query_name = "organizer"
     )
     
     name = models.CharField(
