@@ -13,7 +13,7 @@ from django.utils.encoding import force_bytes, force_text
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from .forms import *
 from core.views import MultiFormsView, AjaxResponseMixin
@@ -27,6 +27,7 @@ from django.contrib.auth import (
     login, 
     # logout
 )
+import json
 
 User = get_user_model()
 
@@ -89,10 +90,19 @@ class VolunteerSignUp(AjaxResponseMixin, MultiFormsView):
 
         user.email_user(subject, message)
 
-        message = "Thank you for registering with us. An activation link is sent to {0}. Please confirm you email.".format(user.email)
+        message = "Thank you for registering with us. An activation link is sent to <strong class ='font-weight-bolder'>{0}</strong>. Please confirm you email.".format(user.email)
 
         messages.success(self.request, message)
-        return super().forms_valid(forms)
+        data = {
+            'msg':render_to_string('message.html', {}, request = self.request)
+        }
+        return self.render_to_json(data)
+
+    def render_to_json(self, data):
+        return HttpResponse(
+            json.dumps(data, ensure_ascii = False),
+            content_type = self.request.is_ajax() and "application/json" or "text/html"
+        )
 
 class OrganizerSignUp(AjaxResponseMixin,MultiFormsView):
     """Sign up view for organizations"""
@@ -134,6 +144,25 @@ class OrganizerSignUp(AjaxResponseMixin,MultiFormsView):
         contact = forms['contact'].save(commit = False)
         contact.organizer = organizer
         contact.save()
+
+        current_site = get_current_site(self.request)
+        subject = "Activate your Come and Volunteer Account"
+
+        message = render_to_string(
+            'registration/account_activation.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            }
+        )
+
+        user.email_user(subject, message)
+
+        message = "Thank you for registering with us. An activation link is sent to {0}. Please confirm you email.".format(user.email)
+
+        messages.success(self.request, message)
+
         return super().forms_valid(forms)
 
 class ActivateAccount(View):

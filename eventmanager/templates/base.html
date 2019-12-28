@@ -7,9 +7,10 @@
     <title>{{title}}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
     {% block css %}
-
     {% endblock css %}
+
 </head>
 <body>
     <div class="container">
@@ -27,13 +28,10 @@
 
     {% block main %}
     {% endblock main %}
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <div id="pop-up-messages">
+        {% include "message.html" %}
+    </div>
+    
     </div>
     <div class="modal fade " id="modal-form">
         <div class="modal-dialog modal-sm"  role="document">
