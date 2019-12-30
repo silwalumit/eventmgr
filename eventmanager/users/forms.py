@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 
 user = get_user_model
 
-class userLoginForm(AuthenticationForm):
+class UserLoginForm(AuthenticationForm):
     remember_me = forms.BooleanField(
         initial= False,
         label = 'Remember me',
@@ -97,3 +97,14 @@ class ContactsForm(forms.ModelForm):
     class Meta:
         model = OrganizationContact
         exclude = ('organizer',)
+
+class VolunteerProfileForm(VolunteerCreationForm):
+
+    def __init__(self, *args,**kwargs):
+        super().__init__(*args,**kwargs)
+
+    class Meta:
+        model = Volunteer
+        exclude = ('user',)
+
+

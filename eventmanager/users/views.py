@@ -19,7 +19,7 @@ from .forms import *
 from core.views import MultiFormsView, AjaxResponseMixin
 
 from users.tokens import account_activation_token
-from django.views.generic import View
+from django.views.generic import View, FormView
 
 from django.contrib.auth import (
     # authenticate, 
@@ -34,7 +34,7 @@ User = get_user_model()
 class Login(AjaxResponseMixin, LoginView):
     success_url= reverse_lazy("home")
     ajax_template_name = "registration/login.html"
-    form_class = userLoginForm
+    form_class = UserLoginForm
     def get_success_url(self):
         return self.success_url
 
@@ -181,6 +181,30 @@ class ActivateAccount(View):
             messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
         return HttpResponseRedirect(reverse("home"))
 
-# class EditOrganizationProfile(LoginRequiredMixin, MultiFormsView):
+class EditProfile(LoginRequiredMixin, MultiFormsView):
 
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.user = request.user
+        if self.user.is_volunteer:
+            self.form_classes['volunteer'] = VolunteerProfileForm
+            self.template_name = "volunteer/profile.html"
+        else:
+            self.form_classses[] = None
+            self.template_name = "organizer/profile.html"
 
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self, form_name):
+        kwargs = super().get_form_kwargs(form_name)
+        
+        if self.user.is_volunteer:
+            kwargs.update({'instance':self.user.volunteer})
+        else:
+            kwargs.update({'instance':self.user.organizer})
+
+        return kwargs
+
+    def forms_valid(self, forms):
+        self.object = form.save()
+        super().form_valid()
