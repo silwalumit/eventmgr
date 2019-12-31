@@ -1,5 +1,42 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-<form action="" method = "post">
-    {{form|crispy}}
-</form>
+{% block main %}
+<div class="container">
+    <div class="row"></div>
+    <div class="row">
+        <h1>Account Settings</h1>
+    </div>
+    <form action="" method = "post">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-4">
+                <span class = "d-none">
+                    {{user}}
+                </span>
+                <div class = "profile-image-container text-center">
+                    {% if profile.avatar %}
+                        <img src="{{profile.avatar.url}}" alt="Profile Picture" style = "width:100px; height:100px;">
+                    {%else%}
+                    <img src="" alt="" class = "rounded-circle" style = "width:100px; height:100px;">    
+                    {% endif %}
+                </div>
+                <br>
+                <button type = "button" class = "btn btn-secondary">
+                    Change Profile picture
+                </button>
+            </div>
+            <div class="col-8">
+                <h2>
+                    Hi {{profile}}, tell us about yourself and how we can contact you.
+                </h2>
+                
+            </div>
+        </div>
+           
+            {{volunteer}}
+
+        </div>
+    </form>
+</div>
+    
+{% endblock main %}

@@ -6,7 +6,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth import get_user_model
 
-user = get_user_model
+User = get_user_model()
 
 class UserLoginForm(AuthenticationForm):
     remember_me = forms.BooleanField(
@@ -107,4 +107,8 @@ class VolunteerProfileForm(VolunteerCreationForm):
         model = Volunteer
         exclude = ('user',)
 
+class UserProfile(forms.ModelForm):
 
+    class Meta:
+        model = User
+        fields = ('avatar', )

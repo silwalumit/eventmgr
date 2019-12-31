@@ -15,6 +15,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 
+# from django.contrib.auth import login as auth_login
 from .forms import *
 from core.views import MultiFormsView, AjaxResponseMixin
 
@@ -35,6 +36,7 @@ class Login(AjaxResponseMixin, LoginView):
     success_url= reverse_lazy("home")
     ajax_template_name = "registration/login.html"
     form_class = UserLoginForm
+    
     def get_success_url(self):
         return self.success_url
 
@@ -42,6 +44,28 @@ class Login(AjaxResponseMixin, LoginView):
         if not request.is_ajax():
             return HttpResponseRedirect(reverse("home"))
         return super().get(request, *args, **kwargs)
+
+    def form_valid(self,form):
+        super().form_valid(form)
+        remember_me = form.cleaned_data.get('remember_me')
+
+        if remember_me:
+            self.request.session.set_expiry(30*24*60)
+        else:
+            self.request.session.set_expiry(0)
+        
+        data = {
+            'data': render_to_string('header.html', {}, request = self.request) 
+        }
+        return self.render_to_json(data)
+
+    def render_to_json(self, data):
+        return HttpResponse(
+            json.dumps(data, ensure_ascii = False),
+            content_type = self.request.is_ajax() and "application/json" or "text/html"
+        )
+
+
 
 class Logout(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy("home")
@@ -94,7 +118,7 @@ class VolunteerSignUp(AjaxResponseMixin, MultiFormsView):
 
         messages.success(self.request, message)
         data = {
-            'msg':render_to_string('message.html', {}, request = self.request)
+            'data':render_to_string('header.html', {}, request = self.request)
         }
         return self.render_to_json(data)
 
@@ -163,7 +187,16 @@ class OrganizerSignUp(AjaxResponseMixin,MultiFormsView):
 
         messages.success(self.request, message)
 
-        return super().forms_valid(forms)
+        data = {
+            'data':render_to_string('header.html', {}, request = self.request)
+        }
+        return self.render_to_json(data)
+
+    def render_to_json(self, data):
+        return HttpResponse(
+            json.dumps(data, ensure_ascii = False),
+            content_type = self.request.is_ajax() and "application/json" or "text/html"
+        )
 
 class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
@@ -183,14 +216,24 @@ class ActivateAccount(View):
 
 class EditProfile(LoginRequiredMixin, MultiFormsView):
 
-    
+    form_classes = {
+        'user': UserProfile
+    }
     def dispatch(self, request, *args, **kwargs):
         self.user = request.user
+        
+        self.extra_context = {
+            'profile':request.user
+        }
+
         if self.user.is_volunteer:
             self.form_classes['volunteer'] = VolunteerProfileForm
             self.template_name = "volunteer/profile.html"
         else:
-            self.form_classses[] = None
+            self.form_classses.update({
+                'organizer': OrganizerCreationForm,
+                'contact': ContactsForm
+            })
             self.template_name = "organizer/profile.html"
 
         return super().dispatch(request, *args, **kwargs)
