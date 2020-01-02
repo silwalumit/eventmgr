@@ -17,14 +17,15 @@ class UserLoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].label = ''
-        self.fields["password"].label = ''    
-        self.fields["username"].widget.attrs.update({
-            'placeholder':"Email Address",
-        })
-        self.fields["password"].widget.attrs.update({
-            'placeholder':"Password",
-        })
+
+        self.placeholders = {
+            'username': 'Email Address',
+            'password': 'Password'
+        }
+
+        for k,v in self.placeholders.items():
+            self.fields[k].label=''
+            self.fields[k].widget.attrs.update({'placeholder':v})  
 
 
 
@@ -32,11 +33,15 @@ class VolunteerCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["first_name"].widget.attrs.update({'placeholder':'First Name'})
-        self.fields["last_name"].widget.attrs.update({'placeholder':'Last Name'})
-        for field in self.fields:
-            self.fields[field].label=''
-            
+
+        self.placeholders = {
+            'first_name': 'First Name',
+            'last_name': 'last Name'
+        }
+
+        for k, v in self.placeholders.items():
+            self.fields[k].label=''
+            self.fields[k].widget.attrs.update({'placeholder':v})
     
     class Meta:
         model = Volunteer
@@ -46,15 +51,15 @@ class UserCreationForm(AuthUserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        placeholder = "Email Address"
+        self.placeholders = {
+            'email': "Email Address",
+            'password1':"Password",
+            'password2':"Confirm Password"
+        }
         
-        for field in self.fields:
-            self.fields[field].label = ''
-            if field == 'password1':
-                placeholder = "Password"
-            elif field == 'password2':
-                placeholder = "Confirm password"
-            self.fields[field].widget.attrs.update({'placeholder':placeholder,'class':'form-control'})
+        for k,v in self.placeholders.items():
+            self.fields[k].label = ''
+            self.fields[k].widget.attrs.update({'placeholder':v,'class':'form-control'})
     
     class Meta:
         model = User
@@ -64,14 +69,18 @@ class OrganizerCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['name'].widget.attrs.update({'placeholder':'Name of your organization'})
-        self.fields['description'].widget.attrs.update({
-            "placeholder":"Describe what your organization do",
-            "rows":5
-        })
-        for field in self.fields:
-            self.fields[field].label = ''
-    
+        self.placeholders = {
+            "name": "Name of your organization",
+            "description": "Describe what your organization do ..."
+        }
+
+        for k,v in self.placeholders.items():
+            self.fields[k].label = ''
+            if k == "description":
+                self.fields[k].widget.attrs.update({"placeholder":v, "rows":5})
+            else:
+                self.fields[k].widget.attrs.update({'placeholder':v})
+       
     class Meta:
         model = Organizer
         exclude = ('user', )
@@ -101,6 +110,12 @@ class ContactsForm(forms.ModelForm):
 class VolunteerProfileForm(VolunteerCreationForm):
 
     def __init__(self, *args,**kwargs):
+        self.placeholders.update({
+            'dob': 'Date of Birth',
+            'bio': 'Tell us something about you ...',
+            'contact_no':'How can we contact you?'
+        })
+
         super().__init__(*args,**kwargs)
 
     class Meta:

@@ -11,7 +11,7 @@ from django.utils.http import (
 
 from django.utils.encoding import force_bytes, force_text
 
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 
@@ -214,6 +214,11 @@ class ActivateAccount(View):
             messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
         return HttpResponseRedirect(reverse("home"))
 
+class ChangePassword(LoginRequiredMixin, PasswordChangeView):
+  template_name = "registration/change_password.html"
+  success_url = reverse_lazy("home")
+
+
 class EditProfile(LoginRequiredMixin, MultiFormsView):
 
     form_classes = {
@@ -249,5 +254,12 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
         return kwargs
 
     def forms_valid(self, forms):
-        self.object = form.save()
-        super().form_valid()
+        self.object = forms['user'].save()
+
+        if self.object.is_volunteer:
+            volunteer = forms['volunteer'].save()
+        else:
+            organizer = form['organizer'].save()
+            contact = form['contact'].save()
+
+        return super().form_valid()
