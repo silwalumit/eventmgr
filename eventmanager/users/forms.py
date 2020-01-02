@@ -30,14 +30,15 @@ class UserLoginForm(AuthenticationForm):
 
 
 class VolunteerCreationForm(forms.ModelForm):
+    placeholders = {}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.placeholders = {
+        self.placeholders.update({
             'first_name': 'First Name',
             'last_name': 'last Name'
-        }
+        })
 
         for k, v in self.placeholders.items():
             self.fields[k].label=''
@@ -91,7 +92,7 @@ class ContactsForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].label=''
 
-        placeholders = {
+        self.placeholders = {
             'primary_no':'Primary Number',
             'secondary_no':'Secondary Number',
             'website':'Website(e.g website.org)',
@@ -100,7 +101,7 @@ class ContactsForm(forms.ModelForm):
             'instagram':'instagram (e.g instagram.com/yourprofile)'
         }
 
-        for k, v in placeholders.items():
+        for k, v in self.placeholders.items():
             self.fields[k].widget.attrs.update({'placeholder':v})
     
     class Meta:

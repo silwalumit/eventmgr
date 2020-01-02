@@ -22,6 +22,7 @@ from core.views import MultiFormsView, AjaxResponseMixin
 from users.tokens import account_activation_token
 from django.views.generic import View, FormView
 
+from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth import (
     # authenticate, 
     get_user_model, 
@@ -263,3 +264,8 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
             contact = form['contact'].save()
 
         return super().form_valid()
+
+class PasswordResetRequestView(PasswordResetView):
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
