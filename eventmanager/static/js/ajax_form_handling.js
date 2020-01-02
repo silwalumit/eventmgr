@@ -15,8 +15,9 @@ $(function () {
                         });
                         ajaxFormSubmit(form, modal);
                     } else {
-                        console.log(xhr.msg)
-                        $("#pop-up-messages").html(xhr.msg);
+                        if (xhr.data){
+                            $("header").html(xhr.data);
+                        }
                         $(modal).modal('toggle');
                     }
                 },

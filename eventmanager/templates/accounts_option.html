@@ -1,0 +1,23 @@
+{% if not request.user.is_authenticated %}
+    <li class = "account-option">
+        <a class = "show-form" href="{% url 'user:login' %}" title = "Sign In" data-class = "modal-sm">Sign in</a>
+    </li>
+    <li class = "account-option">
+        <a class = "show-form" href="{% url 'user:signup' %}" title = "Sign Up" data-class = "modal-sm">Sign up</a>
+    </li>
+{% else %}
+    <li>
+        <p >
+            You are signed in as<br> 
+            <span class = "name">
+                {{request.user.email}}
+            </span>
+        </p>    
+    </li>
+    <li>
+        {# TODO: Dropdown Button #}
+        <a href="{% url 'user:logout' %}">Logout</a>
+        <a href="{% url 'user:settings' %}">Settings</a>
+    </li>
+    
+{% endif %}

@@ -13,26 +13,14 @@
 
 </head>
 <body>
-    <div class="container">
-    {% block auth %}
-        {% if not user.is_authenticated %}
-            <a class = "show-form" href="{% url 'user:login' %}" title = "Sign In" data-class = "modal-sm">Sign in</a>
-            <a class = "show-form" href="{% url 'user:signup' %}" title = "Sign Up" data-class = "modal-sm">
-            Sign up
-        </a>
-        {% else %}
-            logged in as {{request.user.email}}
-            <a href="{% url 'user:logout' %}">Logout</a>    
-        {% endif %}    
-    {% endblock auth %}
-
-    {% block main %}
-    {% endblock main %}
-    <div id="pop-up-messages">
-        {% include "message.html" %}
-    </div>
+    {% include "header.html" %} 
     
-    </div>
+    <main>
+        {% block main %}
+        
+        {% endblock main %}
+    </main>
+    
     <div class="modal fade " id="modal-form">
         <div class="modal-dialog modal-sm"  role="document">
             <div class="modal-content">
