@@ -22,7 +22,11 @@ from core.views import MultiFormsView, AjaxResponseMixin
 from users.tokens import account_activation_token
 from django.views.generic import View, FormView
 
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import(
+    PasswordResetView,
+    PasswordResetDoneView,
+)
+
 from django.contrib.auth import (
     # authenticate, 
     get_user_model, 
@@ -265,7 +269,26 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
 
         return super().form_valid()
 
-class PasswordResetRequestView(PasswordResetView):
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
+from django.contrib.auth.views import(
+    PasswordResetView,
+    PasswordResetDoneView, 
+    PasswordResetConfirmView,
+    PasswordResetCompleteView
+)
+
+
+class PasswordReset(PasswordResetView):
+    success_url = reverse_lazy('user:password_reset_done') 
+    template_name = 'registration/password_rst_form.html'
+    email_template_name = 'registration/password_rst_email.html'
+
+class PasswordResetDone(PasswordResetDoneView):
+    template_name = 'registration/password_rst_done.html'
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    success_url = reverse_lazy('user:password_reset_complete') 
+    template_name = "registration/password_rst_confirm.html"
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    template_name = "registration/password_rst_complete.html"
