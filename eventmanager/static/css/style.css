@@ -9,3 +9,19 @@ ul{
 .form-group{
     margin-bottom: 5px !important;
 }
+
+/*sidebar*/
+.navbar-nav .dropdown-menu {
+    position:absolute !important;
+
+    background-color:rgb(52, 58, 64) !important;;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item {
+    color: #FFF !important;
+}
+
+
+.dropdown-item:hover{
+    background-color:rgb(0, 0, 0, 0.5) !important
+}

@@ -2,6 +2,7 @@ $(function () {
     let ajaxFormSubmit = function(form, modal) {
         $(form).submit(function (e) {
             e.preventDefault();
+            let form_id = $(form).attr('id')
             $.ajax({
                 type: $(this).attr('method'),
                 url: $(this).attr('action'),
@@ -15,9 +16,8 @@ $(function () {
                         });
                         ajaxFormSubmit(form, modal);
                     } else {
-                        if (xhr.data){
-                            $("header").html(xhr.data);
-                        }
+                        console.log(xhr.data)
+                        $("header").html(xhr.data);
                         $(modal).modal('toggle');
                     }
                 },

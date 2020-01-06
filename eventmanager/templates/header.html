@@ -1,17 +1,27 @@
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="logo col-4"></div>
-            <div class="col-8">
-                <ul class = "float-right list-unstyled account-actions">
-                {% include "accounts_option.html" %}     
-                </ul>
-            </div> 
-        </div>
-        <div class="row">
-            <div id="pop-up-messages" class = "col-12">
-                {% include "message.html" %}
-            </div>
-        </div>
+<nav class="navbar navbar-expand-md  navbar-dark bg-dark">
+    <a class="navbar-brand border border-secondary rounded pl-3 pr-3" href="#">Come & Volunteer
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse d-md-flex justify-content-md-between" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" href="#">Start Voluntering</a>
+        <a class="nav-item nav-link" href="#">Find Volunteers</a>
+        <a class="nav-item nav-link" href="#">Search Organizations</a>        
     </div>
-</header>
+    <div class="navbar-nav">
+        {% include "accounts_option.html" %}
+    </div>
+
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div id="pop-up-messages" class = "col-12">
+            {% include "message.html" %}
+        </div>    
+    </div>
+</div>
+

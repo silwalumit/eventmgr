@@ -53,12 +53,16 @@ class Login(AjaxResponseMixin, LoginView):
     def form_valid(self,form):
         super().form_valid(form)
         remember_me = form.cleaned_data.get('remember_me')
-
         if remember_me:
             self.request.session.set_expiry(30*24*60)
         else:
             self.request.session.set_expiry(0)
         
+        messages.success(
+            self.request, 
+            "Successfully logged in. Logged in as <strong>{0}</strong>.".format(self.request.user)
+        );
+
         data = {
             'data': render_to_string('header.html', {}, request = self.request) 
         }

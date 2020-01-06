@@ -1,23 +1,24 @@
 {% if not request.user.is_authenticated %}
-    <li class = "account-option">
-        <a class = "show-form" href="{% url 'user:login' %}" title = "Sign In" data-class = "modal-sm">Sign in</a>
-    </li>
-    <li class = "account-option">
-        <a class = "show-form" href="{% url 'user:signup' %}" title = "Sign Up" data-class = "modal-sm">Sign up</a>
-    </li>
-{% else %}
-    <li>
-        <p >
-            You are signed in as<br> 
-            <span class = "name">
-                {{request.user.email}}
-            </span>
-        </p>    
-    </li>
-    <li>
-        {# TODO: Dropdown Button #}
-        <a href="{% url 'user:logout' %}">Logout</a>
-        <a href="{% url 'user:settings' %}">Settings</a>
-    </li>
-    
-{% endif %}
+    <a class = "show-form nav-item nav-link btn btn-outline-primary mr-md-2" href="{% url 'user:login' %}" title = "Sign In" data-class = "modal-sm" id = "login">Sign in</a>
+    <a class = "show-form nav-item nav-link btn btn-outline-primary my-md-0 my-2" href="{% url 'user:signup' %}" title = "Sign Up" data-class = "modal-sm">Sign up</a>
+{%else%}
+    <div class="nav-item dropdown " >
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% if request.user.is_volunteer %}
+                Hello, {{request.user.volunteer.name}}
+            {%else%}
+                Hello, {{request.user.organizer}}
+            {% endif %}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'user:settings' %}">
+              Profile Settings
+            </a>
+            <a class="dropdown-item show-form" href="{% url 'user:changepassword' %}">
+              Change Password
+            </a>
+            <a class="dropdown-item text-white" href="{% url 'user:logout' %}"> Logout
+            </a>
+        </div>
+    </div>
+{%endif%}
