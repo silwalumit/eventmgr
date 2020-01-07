@@ -118,13 +118,14 @@ class VolunteerProfileForm(VolunteerCreationForm):
         })
 
         super().__init__(*args,**kwargs)
+        self.fields['bio'].widget.attrs.update({'rows':6})
 
     class Meta:
         model = Volunteer
         exclude = ('user',)
 
 class UserProfile(forms.ModelForm):
-
     class Meta:
         model = User
         fields = ('avatar', )
+

@@ -25,3 +25,13 @@ ul{
 .dropdown-item:hover{
     background-color:rgb(0, 0, 0, 0.5) !important
 }
+
+
+#main-wrapper{
+    top: 60px;
+}
+
+.size-200{
+    width:200px;
+    height:200px;
+}

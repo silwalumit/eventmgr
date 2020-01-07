@@ -1,0 +1,21 @@
+{% extends "registration/profile.html" %}
+{% load crispy_forms_tags %}
+
+{% block intro %}
+     <em>Hello, <strong>{{request.user.organizer}}</strong>.Tell us about your organization and how we can contact you.</em>
+{% endblock intro %}
+
+{% block info %}
+    <div class="col-md-7 col-lg-6 mt-sm-2">
+        
+    </div>
+    <div class="w-100"></div>
+    <div class="col-md-5 col-lg-3"></div>
+    <div class="col-md-7 col-lg-6 mt-sm-2">
+        <div class="row">
+            <div class="col-lg-9 col-8 ml-auto">
+                <input type="submit" name = "profile-settings" value = "Save Profile" class = "btn btn-secondary bg-dark">
+            </div>    
+        </div>
+    </div>
+{% endblock info %}

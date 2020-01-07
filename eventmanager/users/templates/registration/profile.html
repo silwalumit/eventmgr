@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block main %}
+
+<div class="row">
+    <div class="col-12 bg-primary p-5">
+        <h1 class = "display-4 text-white text-right">
+            Profile Settings
+        </h1>
+        <h5 class = "text-white text-right ">
+            {% block intro %}
+                
+            {% endblock intro %}
+        </h5>
+    </div>
+</div>
+<form action="" method = "post">
+    {% csrf_token %}
+    <div class="row mt-3 mb-5 justify-content-lg-center ">
+        <div class="col-md-5 col-lg-3 text-center mt-lg-4 mt-md-4">
+            {% if profile.avatar %}
+                <img src="{{profile.avatar.url}}" alt="Profile Picture" class = "img-fluid size-200" id = "profile-image">
+            {%else%}
+                <img src="{% static 'images/profile.png' %}" alt = "Profile Picture" class = "img-fluid size-200" id = "profile-image">    
+            {% endif %}    
+           <span class = "d-none">
+                {{user.avatar}}
+            </span>
+            <div class = "col mt-2">
+                <button type = "button" class = "btn btn-secondary bg-dark" id = "change-profile">
+                    Change Profile picture
+                </button>    
+            </div>
+        </div> 
+        {% block info %}
+              
+        {% endblock info %}  
+    </div>
+</form>
+{% endblock main %}
+{% block js %}
+    <script>
+        $(function(){
+            $("#change-profile").click(function(e){
+                $("#id_avatar").trigger('click');
+                return false;
+            });
+        });
+    </script>
+{% endblock js %}

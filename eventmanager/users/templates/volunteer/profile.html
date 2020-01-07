@@ -1,42 +1,48 @@
-{% extends "base.html" %}
+{% extends "registration/profile.html" %}
 {% load crispy_forms_tags %}
-{% block main %}
-<div class="container">
-    <div class="row"></div>
-    <div class="row">
-        <h1>Account Settings</h1>
-    </div>
-    <form action="" method = "post">
-        {% csrf_token %}
-        <div class="form-row">
-            <div class="col-4">
-                <span class = "d-none">
-                    {{user}}
-                </span>
-                <div class = "profile-image-container text-center">
-                    {% if profile.avatar %}
-                        <img src="{{profile.avatar.url}}" alt="Profile Picture" style = "width:100px; height:100px;">
-                    {%else%}
-                    <img src="" alt="" class = "rounded-circle" style = "width:100px; height:100px;">    
-                    {% endif %}
-                </div>
-                <br>
-                <button type = "button" class = "btn btn-secondary">
-                    Change Profile picture
-                </button>
-            </div>
-            <div class="col-8">
-                <h2>
-                    Hi {{profile}}, tell us about yourself and how we can contact you.
-                </h2>
-                
-            </div>
-        </div>
-           
-            {{volunteer}}
 
+{% block intro %}
+     <em>Hello, <strong>{{request.user.volunteer}}</strong>.Tell us about yourself and how we can contact you.</em>
+{% endblock intro %}
+
+{% block info %}
+    <div class="col-md-7 col-lg-6 mt-sm-2">
+        <div class="row">
+            <label class = "text-muted  col-lg-3 col-4 text-right">First Name</label>
+            <div class="col-lg-9 col-8">
+                {{volunteer.first_name|as_crispy_field}}
+            </div>
         </div>
-    </form>
-</div>
-    
-{% endblock main %}
+        <div class="row">
+            <label class = "text-muted  col-lg-3 col-4 text-right">Last Name</label>
+            <div class="col-lg-9 col-8">
+                {{volunteer.last_name|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <label class = "text-muted col-lg-3 col-4 text-right">
+                Date of Birth
+            </label>
+            <div class="col-lg-9 col-8">
+                {{volunteer.dob|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <label class = "text-muted col-lg-3 col-4 text-right">
+                Biography
+            </label>
+            <div class="col-lg-9 col-8">
+                {{volunteer.bio|as_crispy_field}}
+            </div>
+        </div>
+    </div>
+    <div class="w-100"></div>
+    <div class="col-md-5 col-lg-3"></div>
+    <div class="col-md-7 col-lg-6 mt-sm-2">
+        <div class="row">
+            <div class="col-lg-9 col-8 ml-auto">
+                <input type="submit" name = "profile-settings" value = "Save Profile" class = "btn btn-secondary bg-dark">
+            </div>    
+        </div>
+    </div>
+{% endblock info %}
