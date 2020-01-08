@@ -246,7 +246,7 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
             self.form_classes['volunteer'] = VolunteerProfileForm
             self.template_name = "volunteer/profile.html"
         else:
-            self.form_classses.update({
+            self.form_classes.update({
                 'organizer': OrganizerCreationForm,
                 'contact': ContactsForm
             })
@@ -262,7 +262,11 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
             if self.user.is_volunteer:
                 kwargs.update({'instance':self.user.volunteer})
             else:
-                kwargs.update({'instance':self.user.organizer})
+                if form_name == "contact":
+                    kwargs.update({'instance':self.user.organizer.contact})
+                else:
+                    kwargs.update({'instance':self.user.organizer})
+
 
         return kwargs
 
@@ -274,8 +278,8 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
         if self.object.is_volunteer:
             volunteer = forms['volunteer'].save()
         else:
-            organizer = form['organizer'].save()
-            contact = form['contact'].save()
+            organizer = forms['organizer'].save()
+            contact = forms['contact'].save()
         messages.success(self.request, "Profile successfully updated.")
         return super().forms_valid(forms)
 

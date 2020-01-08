@@ -9,7 +9,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_superuser',)
 
     fieldsets = (
-        (None, {'fields':('password', 'slug')}),
+        (None, {'fields':('password', 'slug','avatar',)}),
         ('Personal Info', {'fields':('email',)}),
         ('Permissions',{'fields':('is_superuser', 'is_active')}),
     )

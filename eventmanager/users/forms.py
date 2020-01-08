@@ -22,10 +22,10 @@ class UserLoginForm(AuthenticationForm):
             'username': 'Email Address',
             'password': 'Password'
         }
-
+        self.fields['remember_me'].widget.attrs.update({'class':'text-muted'})
         for k,v in self.placeholders.items():
             self.fields[k].label=''
-            self.fields[k].widget.attrs.update({'placeholder':v})  
+            self.fields[k].widget.attrs.update({'placeholder':v, 'class':'form-control-sm'})  
 
 
 
@@ -37,12 +37,12 @@ class VolunteerCreationForm(forms.ModelForm):
 
         self.placeholders.update({
             'first_name': 'First Name',
-            'last_name': 'last Name'
+            'last_name': 'Last Name'
         })
 
         for k, v in self.placeholders.items():
             self.fields[k].label=''
-            self.fields[k].widget.attrs.update({'placeholder':v})
+            self.fields[k].widget.attrs.update({'placeholder':v, 'class':'form-control-sm'})
     
     class Meta:
         model = Volunteer
@@ -60,7 +60,7 @@ class UserCreationForm(AuthUserCreationForm):
         
         for k,v in self.placeholders.items():
             self.fields[k].label = ''
-            self.fields[k].widget.attrs.update({'placeholder':v,'class':'form-control'})
+            self.fields[k].widget.attrs.update({'placeholder':v,'class':'form-control form-control-sm'})
     
     class Meta:
         model = User
@@ -78,9 +78,9 @@ class OrganizerCreationForm(forms.ModelForm):
         for k,v in self.placeholders.items():
             self.fields[k].label = ''
             if k == "description":
-                self.fields[k].widget.attrs.update({"placeholder":v, "rows":5})
+                self.fields[k].widget.attrs.update({"placeholder":v, "rows":5, 'class':'form-control-sm'})
             else:
-                self.fields[k].widget.attrs.update({'placeholder':v})
+                self.fields[k].widget.attrs.update({'placeholder':v,'class':'form-control-sm'})
        
     class Meta:
         model = Organizer
@@ -102,7 +102,7 @@ class ContactsForm(forms.ModelForm):
         }
 
         for k, v in self.placeholders.items():
-            self.fields[k].widget.attrs.update({'placeholder':v})
+            self.fields[k].widget.attrs.update({'placeholder':v,'class':'form-control-sm'})
     
     class Meta:
         model = OrganizationContact
