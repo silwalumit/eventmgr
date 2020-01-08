@@ -233,6 +233,8 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
     form_classes = {
         'user': UserProfile
     }
+    success_url = reverse_lazy("user:settings")
+
     def dispatch(self, request, *args, **kwargs):
         self.user = request.user
         
@@ -254,24 +256,28 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
 
     def get_form_kwargs(self, form_name):
         kwargs = super().get_form_kwargs(form_name)
-        
-        if self.user.is_volunteer:
-            kwargs.update({'instance':self.user.volunteer})
+        if form_name == 'user':
+            kwargs.update({'instance':self.user})
         else:
-            kwargs.update({'instance':self.user.organizer})
+            if self.user.is_volunteer:
+                kwargs.update({'instance':self.user.volunteer})
+            else:
+                kwargs.update({'instance':self.user.organizer})
 
         return kwargs
 
+    @transaction.atomic
     def forms_valid(self, forms):
-        self.object = forms['user'].save()
+        self.object = forms['user'].save(commit = False)
+        self.object.save(update_fields = ('avatar',))
 
         if self.object.is_volunteer:
             volunteer = forms['volunteer'].save()
         else:
             organizer = form['organizer'].save()
             contact = form['contact'].save()
-
-        return super().form_valid()
+        messages.success(self.request, "Profile successfully updated.")
+        return super().forms_valid(forms)
 
 
 from django.contrib.auth.views import(
@@ -280,7 +286,6 @@ from django.contrib.auth.views import(
     PasswordResetConfirmView,
     PasswordResetCompleteView
 )
-
 
 class PasswordReset(PasswordResetView):
     success_url = reverse_lazy('user:password_reset_done') 

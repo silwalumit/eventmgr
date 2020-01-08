@@ -1,29 +1,4 @@
 $(function () {
-    let ajaxFormSubmit = function(form, modal) {
-        $(form).submit(function (e) {
-            e.preventDefault();
-            let form_id = $(form).attr('id')
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (xhr, status, thrownError) {
-                    if ( $(xhr).find('.invalid-feedback').length > 0 ) {
-                        $(modal).find('.modal-body').html(xhr);
-                        $('.invalid-feedback').css({
-                            'display': 'block',
-                            'font-weight':800
-                        });
-                        ajaxFormSubmit(form, modal);
-                    } else {
-                        console.log(xhr.data)
-                        $("header").html(xhr.data);
-                        $(modal).modal('toggle');
-                    }
-                },
-            });
-        });
-    }
 
     $(document).on("click", ".show-form", function(event) {
         event.preventDefault();
@@ -45,3 +20,30 @@ $(function () {
         });
     });
 });
+
+let ajaxFormSubmit = function(form, modal) {
+    $(form).submit(function (e) {
+        e.preventDefault();
+        let form_id = $(form).attr('id')
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function (xhr, status, thrownError) {
+                if ( $(xhr).find('.invalid-feedback').length > 0 ) {
+                    $(modal).find('.modal-body').html(xhr);
+                    $('.invalid-feedback').css({
+                        'display': 'block',
+                        'font-weight':800
+                    });
+                    ajaxFormSubmit(form, modal);
+                } else {
+                    console.log(xhr.data)
+                    $("header").html(xhr.data);
+                    $(modal).modal('toggle');
+                    toast();
+                }
+            },
+        });
+    });
+}
