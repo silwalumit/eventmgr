@@ -20,7 +20,8 @@
             {{form.password|as_crispy_field}}
         </div>        
         <div class="col-6">
-            {{form.remember_me|as_crispy_field}}
+            {{form.remember_me}}
+            <label class = "text-muted small">Remember me</label>
         </div>
         <div class = "col-6">
             <a class = "text-muted small show-form" href="{% url 'user:password_reset' %}" title="Reset Password" data-class = "modal-sm">Forgot password?</a>    

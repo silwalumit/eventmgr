@@ -1,15 +1,15 @@
 {% if messages %}
     {% for message in messages %}
     <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-      <div class="toast toast-container" data-autohide="false">
-        <div class="toast-header">
-          <strong class="mr-auto">Alert</strong>
+      <div class="toast toast-container bg-dark-primary" data-autohide="false">
+        <div class="toast-header bg-dark-primary">
+          <strong class="mr-auto">TADA!</strong>
          
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <button type="button" class="ml-2 mb-1 close text-white " data-dismiss="toast" aria-label="Close">
             <span aria-hidden="false">&times;</span>
           </button>
         </div>
-        <div class="toast-body" id = "pop-up-messages" >
+        <div class="toast-body text-white" id = "pop-up-messages" >
           {{ message|safe }}
         </div>
       </div>
