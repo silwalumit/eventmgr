@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-<form action="{% url 'user:login' %}" method = "post">
+<form action="{% url 'user:login' %}" method = "post" class="ajax-submit">
     {% csrf_token %}
     <div class="form-row" id = "login">
         <div class="col-12">
@@ -23,7 +23,7 @@
             {{form.remember_me}}
             <label class = "text-muted small">Remember me</label>
         </div>
-        <div class = "col-6">
+        <div class = "col-6 text-right">
             <a class = "text-muted small show-form" href="{% url 'user:password_reset' %}" title="Reset Password" data-class = "modal-sm">Forgot password?</a>    
         </div>
         <div class="w-100"></div>

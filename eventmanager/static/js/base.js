@@ -1,4 +1,4 @@
 $(function(){
-  toast();  
+  toast();
 });
 var toast = ()=> $(".toast").toast('show');

@@ -15,35 +15,35 @@ $(function () {
             success: function(data, status, jqXHR){  
                 $("#form-modal-body").html(data);
                 $("#modal-form").modal("show");
-                ajaxFormSubmit("#form-modal-body form", "#modal-form")
+                // ajaxFormSubmit("#form-modal-body form", "#modal-form")
             },
         });
     });
 });
 
-let ajaxFormSubmit = function(form, modal) {
-    $(form).submit(function (e) {
-        e.preventDefault();
-        let form_id = $(form).attr('id')
-        $.ajax({
-            type: $(this).attr('method'),
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function (xhr, status, thrownError) {
-                if ( $(xhr).find('.invalid-feedback').length > 0 ) {
-                    $(modal).find('.modal-body').html(xhr);
-                    $('.invalid-feedback').css({
-                        'display': 'block',
-                        'font-weight':800
-                    });
-                    ajaxFormSubmit(form, modal);
-                } else {
-                    console.log(xhr.data)
-                    $("header").html(xhr.data);
-                    $(modal).modal('toggle');
-                    toast();
-                }
-            },
-        });
-    });
-}
+// let ajaxFormSubmit = function(form, modal) {
+//     $(form + " .ajax-sumit").submit(function (e) {
+//         e.preventDefault();
+//         let form_id = $(form).attr('id')
+//         $.ajax({
+//             type: $(this).attr('method'),
+//             url: $(this).attr('action'),
+//             data: $(this).serialize(),
+//             success: function (xhr, status, thrownError) {
+//                 if ( $(xhr).find('.invalid-feedback').length > 0 ) {
+//                     $(modal).find('.modal-body').html(xhr);
+//                     $('.invalid-feedback').css({
+//                         'display': 'block',
+//                         'font-weight':800
+//                     });
+//                     ajaxFormSubmit(form, modal);
+//                 } else {
+//                     console.log(xhr.data)
+//                     $("header").html(xhr.data);
+//                     $(modal).modal('toggle');
+//                     toast();
+//                 }
+//             },
+//         });
+//     });
+// }

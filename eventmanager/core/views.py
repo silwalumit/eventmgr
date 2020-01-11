@@ -4,7 +4,11 @@ from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction
-import code 
+ 
+
+from django.template.loader import render_to_string
+import json
+import code
 
 class MultiFormsMixin(ContextMixin):
     form_classes = {}
@@ -77,7 +81,7 @@ class BaseMultiFormsView(MultiFormsMixin, ProcessMutliFormsView):
 
 class MultiFormsView(TemplateResponseMixin, BaseMultiFormsView):
     """A view for displaying several forms, and rendering a template response."""
-class AjaxResponseMixin:
+class AjaxTemplateMixin:
     def dispatch(self, request, *args, **kwargs):
         if not hasattr(self, 'ajax_template_name'):
             split = self.template_name.split(".html")
@@ -90,3 +94,39 @@ class AjaxResponseMixin:
 
         return super().dispatch(request, *args, **kwargs)
 
+class AjaxableResponseMixin:
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    
+    ajax_template_name = None
+    context = {}
+    context_name = "data"
+
+    def get_context(self):
+        return self.context
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super().form_valid(form)
+        
+        if self.request.is_ajax():
+            data = {
+            self.context_name: render_to_string(
+                self.ajax_template_name, 
+                self.get_context(), 
+                request = self.request
+            )}
+
+            return self.render_to_json(data)
+        else:
+            return response 
+
+    def render_to_json(self, data):
+        return HttpResponse(
+            json.dumps(data, ensure_ascii = False),
+            content_type = self.request.is_ajax() and "application/json" or "text/html"
+        )

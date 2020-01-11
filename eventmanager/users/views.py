@@ -17,7 +17,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 # from django.contrib.auth import login as auth_login
 from .forms import *
-from core.views import MultiFormsView, AjaxResponseMixin
+from core.views import MultiFormsView, AjaxTemplateMixin, AjaxableResponseMixin
 
 from users.tokens import account_activation_token
 from django.views.generic import View, FormView
@@ -37,7 +37,7 @@ import json
 
 User = get_user_model()
 
-class Login(AjaxResponseMixin, LoginView):
+class Login(AjaxTemplateMixin, LoginView):
     success_url= reverse_lazy("home")
     ajax_template_name = "registration/login.html"
     form_class = UserLoginForm
@@ -51,35 +51,25 @@ class Login(AjaxResponseMixin, LoginView):
         return super().get(request, *args, **kwargs)
 
     def form_valid(self,form):
-        super().form_valid(form)
+        response = super().form_valid(form)
         remember_me = form.cleaned_data.get('remember_me')
         if remember_me:
             self.request.session.set_expiry(30*24*60)
         else:
             self.request.session.set_expiry(0)
-        
+
         messages.success(
             self.request, 
             "Successfully logged in. Logged in as <strong>{0}</strong>.".format(self.request.user)
-        );
-
-        data = {
-            'data': render_to_string('header.html', {}, request = self.request) 
-        }
-        return self.render_to_json(data)
-
-    def render_to_json(self, data):
-        return HttpResponse(
-            json.dumps(data, ensure_ascii = False),
-            content_type = self.request.is_ajax() and "application/json" or "text/html"
         )
 
+        return response
 
 
 class Logout(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy("home")
     
-class VolunteerSignUp(AjaxResponseMixin, MultiFormsView):
+class VolunteerSignUp(AjaxTemplateMixin, MultiFormsView):
     extra_content = {
         "title":"Volunteer's Sign Up"
     }
@@ -126,18 +116,10 @@ class VolunteerSignUp(AjaxResponseMixin, MultiFormsView):
         message = "Thank you for registering with us. An activation link is sent to <strong class ='font-weight-bolder'>{0}</strong>. Please confirm you email.".format(user.email)
 
         messages.success(self.request, message)
-        data = {
-            'data':render_to_string('header.html', {}, request = self.request)
-        }
-        return self.render_to_json(data)
 
-    def render_to_json(self, data):
-        return HttpResponse(
-            json.dumps(data, ensure_ascii = False),
-            content_type = self.request.is_ajax() and "application/json" or "text/html"
-        )
+        return super().forms_valid(forms)
 
-class OrganizerSignUp(AjaxResponseMixin,MultiFormsView):
+class OrganizerSignUp(AjaxTemplateMixin,MultiFormsView):
     """Sign up view for organizations"""
     extra_content = {
         "title":"Organizer's Sign Up"
@@ -195,17 +177,7 @@ class OrganizerSignUp(AjaxResponseMixin,MultiFormsView):
         message = "Thank you for registering with us. An activation link is sent to {0}. Please confirm you email.".format(user.email)
 
         messages.success(self.request, message)
-
-        data = {
-            'data':render_to_string('header.html', {}, request = self.request)
-        }
-        return self.render_to_json(data)
-
-    def render_to_json(self, data):
-        return HttpResponse(
-            json.dumps(data, ensure_ascii = False),
-            content_type = self.request.is_ajax() and "application/json" or "text/html"
-        )
+        return super().forms_valid(forms)
 
 class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
@@ -221,11 +193,22 @@ class ActivateAccount(View):
             messages.success(request, "Congratulations! Your account have been confirmed.")
         else:
             messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
+        
         return HttpResponseRedirect(reverse("home"))
 
-class ChangePassword(LoginRequiredMixin, PasswordChangeView):
+class ChangePassword(LoginRequiredMixin,PasswordChangeView):
   template_name = "registration/change_password.html"
   success_url = reverse_lazy("home")
+  form_class = CustomPasswordChangeForm
+  ajax_template_name = "header.html"
+
+  def form_valid(self, form):
+    messages.success(
+        self.request, 
+        "You have successfully changed your password"
+    )
+
+    return super().form_valid(form)
 
 
 class EditProfile(LoginRequiredMixin, MultiFormsView):
@@ -267,7 +250,6 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
                 else:
                     kwargs.update({'instance':self.user.organizer})
 
-
         return kwargs
 
     @transaction.atomic
@@ -292,9 +274,28 @@ from django.contrib.auth.views import(
 )
 
 class PasswordReset(PasswordResetView):
-    success_url = reverse_lazy('user:password_reset_done') 
+    success_url = reverse_lazy('home') 
     template_name = 'registration/password_rst_form.html'
     email_template_name = 'registration/password_rst_email.html'
+
+    def form_valid(self, form):
+        message = '''
+        <p>
+        We've emailed you instructions for setting your password, if an 
+        account exists with the email you entered, should receive them shortly.
+        </p>
+        <p>
+        If you don't receive an email, please make sure you've entered the
+        address you registered with, check your spam folder.
+         </p>
+    '''
+        messages.success(
+            self.request,
+            message
+        )
+
+        return super().form_valid(form)
+
 
 class PasswordResetDone(PasswordResetDoneView):
     template_name = 'registration/password_rst_done.html'
