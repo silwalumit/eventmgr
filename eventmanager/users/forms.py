@@ -1,8 +1,10 @@
 from .models import *
 from django import forms
 from django.contrib.auth.forms import (
+    SetPasswordForm,
+    AuthenticationForm,
+    PasswordChangeForm,
     UserCreationForm as AuthUserCreationForm,
-    AuthenticationForm
 )
 from django.contrib.auth import get_user_model
 
@@ -129,12 +131,26 @@ class UserProfile(forms.ModelForm):
         model = User
         fields = ('avatar', )
 
-from django.contrib.auth.forms import PasswordChangeForm
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         placeholders = {
             "old_password":"Old password",
+            "new_password1":"New password",
+            "new_password2":"New password confirmation"
+        }
+
+        for k,v in placeholders.items():
+            self.fields[k].label = ''
+            self.fields[k].widget.attrs.update({
+                'class':'form-control-sm form-control',
+                'placeholder':v
+            })
+
+class CustomSetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        placeholders = {
             "new_password1":"New password",
             "new_password2":"New password confirmation"
         }

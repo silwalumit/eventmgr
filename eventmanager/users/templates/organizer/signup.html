@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 
-<form action="{% url 'user:signup_org' %}" method = "post">
+<form action="{% url 'user:signup_org' %}" method = "post" class="ajax-submit">
     
     {% csrf_token %}
     {{organizer|crispy}}

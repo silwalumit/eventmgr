@@ -38,10 +38,10 @@ class MultiFormsMixin(ContextMixin):
         # code.interact(local = dict(globals(), **locals()))
         return dict([(key, klass(**self.get_form_kwargs(key))) for key, klass in form_classes.items()])
 
-    def forms_valid(self, forms):
+    def form_valid(self, forms):
         return HttpResponseRedirect(self.success_url)
 
-    def forms_invalid(self, forms):
+    def form_invalid(self, forms):
         return self.render_to_response(self.get_context_data(**forms))
 
     def get_form_kwargs(self, form_name):
@@ -72,9 +72,9 @@ class ProcessMutliFormsView(ProcessFormView):
         forms = self.get_forms()
 
         if all([form.is_valid() for form in forms.values()]):
-            return self.forms_valid(forms)
+            return self.form_valid(forms)
         else:
-            return self.forms_invalid(forms)
+            return self.form_invalid(forms)
 
 class BaseMultiFormsView(MultiFormsMixin, ProcessMutliFormsView):
     """ A base view for displaying multiple forms"""
@@ -120,7 +120,6 @@ class AjaxableResponseMixin:
                 self.get_context(), 
                 request = self.request
             )}
-
             return self.render_to_json(data)
         else:
             return response 

@@ -57,24 +57,41 @@ class Login(AjaxTemplateMixin, LoginView):
             self.request.session.set_expiry(30*24*60)
         else:
             self.request.session.set_expiry(0)
-
+        
         messages.success(
             self.request, 
             "Successfully logged in. Logged in as <strong>{0}</strong>.".format(self.request.user)
         )
 
-        return response
+
+        if self.request.is_ajax():
+            data = {
+                'data': render_to_string(
+                    "header.html", 
+                    {}, 
+                    request = self.request
+                )};
+            return self.render_to_json(data)
+        else:
+            return response
+
+    def render_to_json(self, data):
+        return HttpResponse(
+            json.dumps(data, ensure_ascii = False),
+            content_type = self.request.is_ajax() and "application/json" or "text/html"
+        )
+
 
 
 class Logout(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy("home")
     
-class VolunteerSignUp(AjaxTemplateMixin, MultiFormsView):
+class VolunteerSignUp(AjaxableResponseMixin, MultiFormsView):
     extra_content = {
         "title":"Volunteer's Sign Up"
     }
     template_name = "volunteer/signup.html"
-    ajax_template_name = "volunteer/signup.html"
+    ajax_template_name = "header.html"
 
     form_classes = {
         "user":UserCreationForm,
@@ -93,7 +110,7 @@ class VolunteerSignUp(AjaxTemplateMixin, MultiFormsView):
         return super().get(request, *args, **kwargs)
 
     @transaction.atomic
-    def forms_valid(self, forms):
+    def form_valid(self, forms):
         user = forms['user'].save()
         volunteer = forms['volunteer'].save(commit = False)
         volunteer.user = user
@@ -117,16 +134,16 @@ class VolunteerSignUp(AjaxTemplateMixin, MultiFormsView):
 
         messages.success(self.request, message)
 
-        return super().forms_valid(forms)
+        return super().form_valid(forms)
 
-class OrganizerSignUp(AjaxTemplateMixin,MultiFormsView):
+class OrganizerSignUp(AjaxableResponseMixin, MultiFormsView):
     """Sign up view for organizations"""
     extra_content = {
         "title":"Organizer's Sign Up"
     }
 
     template_name = "organizer/signup.html"
-    ajax_template_name = "organizer/signup.html"
+    ajax_template_name = "header.html"
 
     form_classes = {
         "user":UserCreationForm,
@@ -147,7 +164,7 @@ class OrganizerSignUp(AjaxTemplateMixin,MultiFormsView):
         return super().get(request, *args, **kwargs)
 
     @transaction.atomic
-    def forms_valid(self, forms):
+    def form_valid(self, forms):
         user = forms['user'].save(commit = False)
         user.is_volunteer = False
         user.save()
@@ -177,7 +194,8 @@ class OrganizerSignUp(AjaxTemplateMixin,MultiFormsView):
         message = "Thank you for registering with us. An activation link is sent to {0}. Please confirm you email.".format(user.email)
 
         messages.success(self.request, message)
-        return super().forms_valid(forms)
+        
+        return super().form_valid(forms)
 
 class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
@@ -196,18 +214,20 @@ class ActivateAccount(View):
         
         return HttpResponseRedirect(reverse("home"))
 
-class ChangePassword(LoginRequiredMixin,PasswordChangeView):
-  template_name = "registration/change_password.html"
+class ChangePassword(LoginRequiredMixin, AjaxableResponseMixin,PasswordChangeView):
+  
   success_url = reverse_lazy("home")
   form_class = CustomPasswordChangeForm
   ajax_template_name = "header.html"
+  template_name = "registration/change_password.html"
 
   def form_valid(self, form):
+    
     messages.success(
         self.request, 
         "You have successfully changed your password"
     )
-
+    
     return super().form_valid(form)
 
 
@@ -296,13 +316,20 @@ class PasswordReset(PasswordResetView):
 
         return super().form_valid(form)
 
+class PasswordResetConfirm(PasswordResetConfirmView):
+    success_url = reverse_lazy('home') 
+    template_name = "registration/password_rst_confirm.html"
+    form_class = CustomSetPasswordForm
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "Your password has been reset. You may go ahead and login now"
+        )
+        return super().form_valid(form)
 
 class PasswordResetDone(PasswordResetDoneView):
     template_name = 'registration/password_rst_done.html'
-
-class PasswordResetConfirm(PasswordResetConfirmView):
-    success_url = reverse_lazy('user:password_reset_complete') 
-    template_name = "registration/password_rst_confirm.html"
 
 class PasswordResetComplete(PasswordResetCompleteView):
     template_name = "registration/password_rst_complete.html"
