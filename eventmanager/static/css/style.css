@@ -1,7 +1,11 @@
+*{
+    letter-spacing: 0.1em;
+
+}
 ul{
     padding: 0;
     margin:0;
-    
+    letter-spacing: none !important;
 }
 body{
     color:#FFF !important;
@@ -77,4 +81,9 @@ ul{
     min-width:500px !important;
     transform:translate(-50%, -50%);
     /*opacity:0.9 !important;    */
+}
+
+
+.select2, .select2-results__option{
+    color:#000 !important;
 }

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md  navbar-dark bg-dark-secondary shadow-sm mb-5 rounded">
+<nav class="navbar navbar-expand-md  navbar-dark bg-dark-secondary rounded">
     <a class="navbar-brand border border-secondary rounded pl-3 pr-3" href="#">Come & Volunteer
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -7,9 +7,14 @@
 
     <div class="collapse navbar-collapse d-md-flex justify-content-md-between" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-        <a class="nav-item nav-link text-white" href="#">Start Voluntering</a>
+        <a class="nav-item nav-link text-white" href="{% url 'all-events' %}">Start Voluntering</a>
         <a class="nav-item nav-link text-white" href="#">Find Volunteers</a>
-        <a class="nav-item nav-link text-white" href="#">Search Organizations</a>        
+        <a class="nav-item nav-link text-white" href="#">Search Organizations</a>
+        {% if request.user.is_authenticated and not request.user.is_volunteer %}
+            <a href="{% url 'event:add' request.user.slug %}">Add Event</a>
+            <a href="{% url 'event:my-events' request.user.slug %}">My Events</a>
+            
+        {% endif %}
     </div>
     <div class="navbar-nav">
         {% include "accounts_option.html" %}

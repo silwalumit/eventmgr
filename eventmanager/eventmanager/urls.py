@@ -19,9 +19,15 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
+from event.views import AllEvents
+
 urlpatterns = [
     path('', TemplateView.as_view(template_name = 'base.html'), name = "home"),
     path('accounts/', include('users.urls', namespace = "user")),
+    
+    path("events/", AllEvents.as_view(), name = "all-events" ),
+    path('<slug:slug>/events/', include('event.urls', namespace = "event")),
+    
     path('admin/', admin.site.urls),
 
 ]

@@ -3,8 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
 from django.http import HttpResponse, HttpResponseRedirect
-from django.db import transaction
- 
+from django.db import transaction 
 
 from django.template.loader import render_to_string
 import json
@@ -39,7 +38,7 @@ class MultiFormsMixin(ContextMixin):
         return dict([(key, klass(**self.get_form_kwargs(key))) for key, klass in form_classes.items()])
 
     def form_valid(self, forms):
-        return HttpResponseRedirect(self.success_url)
+        return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, forms):
         return self.render_to_response(self.get_context_data(**forms))
