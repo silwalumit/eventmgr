@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from users.models import Organizer, Volunteer
+def upload_location(instance, filename):
+    return "event/organizer/{0}/{1}".format(instance.organizer.id, filename)
 
 class Type(models.Model):
     name = models.CharField(
@@ -38,6 +40,12 @@ class Event(models.Model):
         through_fields = ('event', 'type',),
         related_name='events',
         related_query_name='event',
+    )
+
+    banner_image = models.ImageField(
+        upload_to = upload_location,
+        null= True,
+        blank= True
     )
 
     organizer = models.ForeignKey(

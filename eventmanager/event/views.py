@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.db import transaction
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
@@ -61,11 +62,13 @@ class CreateEvent(MultiFormsView):
     def form_valid(self, forms):
         location = forms['location'].save()
         event_type = forms['type'].save()
+
         event = forms['event'].save(commit = False)
         event.organizer = self.organizer
         event.location = location
-        
-        event.types.add(**event_type)
+        event.save()
+
+        event.types.add(*event_type)
         event.save()
         
         return HttpResponseRedirect(self.get_success_url())
@@ -112,17 +115,46 @@ class AllEvents(ListView):
     context_object_name = "events_list"
     paginate_by = 10
 
+    def get_queryset(self):
+        qs = super().get_queryset().filter(is_published = True)
+
+        query = self.request.GET.get("q")
+        
+        if query:
+            return self.filter(qs, query)
+        else:
+            return  qs
+
+
+    def filter(self, qs, query):
+        queryset = qs.filter(
+            Q(title__istartswith = query) |
+            Q(description__icontains = query) |
+            Q(types__name__icontains = query) |
+            Q(location__name__icontains = query) |
+            Q(organizer__name__icontains = query)
+        ).distinct()
+        return queryset
+
 class MyEvents(AllEvents):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        query = self.request.GET.get("q")
+        qs = self.model.objects.all()
         slug = self.kwargs.get(self.slug_url_kwarg)
+        
         if slug is not None:
-            return qs.filter(organizer__user__slug = slug)
+            qs =  qs.filter(organizer__user__slug = slug)
+        else:
+            qs =  qs
+
+        if query:
+            return self.filter(qs, query)
         else:
             return qs
+
 
 class EventDetailView(DetailView):
     model = Event
