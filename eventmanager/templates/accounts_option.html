@@ -11,6 +11,11 @@
             {% endif %}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            {% if request.user.is_volunteer %}
+                <a class="dropdown-item" href="{% url 'user:dashboard' %}">
+                    Dashboard
+                </a>    
+            {% endif %}
             <a class="dropdown-item" href="{% url 'user:settings' %}">
               Profile Settings
             </a>

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="row">
+    <div class="col-lg-8 col-md-12 m-auto ">
+        <div class="form-row">
+            <div class="col-12 p-2 bg-dark-secondary">
+                <form action="" method = "get">
+                    <div class="form-row">
+                        <div class="col-12 ">
+                            <input type="text" class="form-control" id="Search"  name = "q" placeholder="Search" value = "{{request.GET.q}}">    
+                        </div>
+                    </div>
+                    <div class="collapse mt-2" id = "advanced-search">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <input type="text" name = "org" value = "{{request.GET.org}}" placeholder="Search by organization" class = "form-control ">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" name = "location" value = "{{request.GET.location}}" placeholder="Search by location" class = "form-control ">
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <div class="col-md-6">
+                                <input type="text" name = "tag" value = "{{request.GET.tag}}" placeholder="Search by tag" class = "form-control ">
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="form-row mt-2">
+                        <div class = "col-auto ml-auto mt-1">
+                            <a href = "#advanced-search" class = "text-muted small" data-toggle = "collapse" >Advanced Search</a>
+                        </div>
+                        <div class="col-auto">
+                            <input type="submit" name = "search" value = "Search" class = "btn btn-dark-primary text-white "/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="form-row mt-2 mb-2">
+            {% for event in events_list %}
+            <div class="col-lg-6 d-flex align-items-strech">
+                <div class="card border-0 w-100">
+                    <div class="card-header bg-dark-primary text-white">
+                        <h5>
+                            {{event.title}}
+                            <span class = "small text-muted">
+                                by {{event.organizer.name}}
+                            </span>
+                        </h5>
+                        {% if event.is_published %}
+                            <span class = "small text-muted">{{event.timestamp|timesince}} ago</span>
+                        {% else %}
+                            <span class = "text-danger small">
+                                Draft
+                            </span>
+                        {% endif %}
+                        <div>
+                            <span class = "float-left small">
+                                <strong>Starts On:</strong> {{event.start_date}}
+                            </span>
+                            <span class = "float-right small ">
+                               <strong>Ends On:</strong> {{event.end_date}}
+                            </span>
+                        </div>
+                    </div>
+                    <img class="card-img-top img-fluid" src="{{event.banner_image.url}}" alt="{{event.title}}">
+                    <div class="card-body bg-dark-secondary text-white">
+                        <p class = "card-text">
+                            {{event.description|truncatechars_html:100}}
+                        </p>
+                    </div>
+                    <div class = "bg-dark-secondary px-4 pb-2">
+                        <a href="{% url 'event:detail' event.organizer.user.slug event.id %}" class = "small float-left">View more</a>
+                        {% if not request.user.is_volunteer or request.user == event.organizer.user %}
+                            <a href="{% url 'event:update' event.organizer.user.slug event.id %}" class = "float-right small">Edit</a>
+                        {% endif %} 
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock main %}

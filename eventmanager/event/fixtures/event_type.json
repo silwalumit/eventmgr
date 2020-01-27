@@ -1,0 +1,42 @@
+[
+    {
+        "fields":{
+            "name":"Blood Donation",
+            "description":null
+        },
+        "model":"event.Type",
+        "pk":5
+    },
+    {
+        "fields":{
+            "name":"Plantation",
+            "description":null
+        },
+        "model":"event.Type",
+        "pk":1
+    },
+    {
+        "fields":{
+            "name":"Tutor a Child",
+            "description":null
+        },
+        "model":"event.Type",
+        "pk":2
+    },
+    {
+        "fields":{
+            "name":"Serve Food",
+            "description":null
+        },
+        "model":"event.Type",
+        "pk":3
+    },
+    {
+        "fields":{
+            "name":"Clean Up",
+            "description":null
+        },
+        "model":"event.Type",
+        "pk":4
+    }
+]

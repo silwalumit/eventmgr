@@ -16,7 +16,7 @@ urlpatterns = [
         ActivateAccount.as_view(), 
         name = "activate"
     ),
-
+    path('dashboard/', Dashboard.as_view(), name = "dashboard"),
     path('settings/', EditProfile.as_view(), name = "settings"),
     path('settings/changepassword/', ChangePassword.as_view(), name = "changepassword"),
     

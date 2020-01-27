@@ -19,6 +19,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .forms import *
 from core.views import MultiFormsView, AjaxTemplateMixin, AjaxableResponseMixin
 
+from django.views.generic import TemplateView
+
 from users.tokens import account_activation_token
 from django.views.generic import View, FormView
 
@@ -333,3 +335,12 @@ class PasswordResetDone(PasswordResetDoneView):
 
 class PasswordResetComplete(PasswordResetCompleteView):
     template_name = "registration/password_rst_complete.html"
+
+class Dashboard(TemplateView):
+    template_name = "volunteer/dashboard.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_volunteer:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse("user:settings"))

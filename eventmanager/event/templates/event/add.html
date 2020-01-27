@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block css %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock css %}
+{% block main %}
+
+    <div class="form-row my-2">
+        <div class="col-lg-8 col-12 m-auto rounded">
+            <div class="card border-0">
+                <div class="card-header bg-dark-primary text-white">
+                    <h5>Event Details</h5>
+                </div>
+                <div class="card-body bg-dark-secondary">
+                    <form action = "." method = "post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">Banner Image</label>
+                            <div class="col-md-9">
+                                {{event.banner_image}}
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">Title</label>
+                            <div class="col-md-9">
+                                {{event.title|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">Category</label>
+                            <div class="col-md-8">
+                                {{event.types|as_crispy_field}}
+                            </div>
+                            <a href="#" class = "btn-add small mt-2">Add more</a>
+                        </div>
+                        <div id="type_formset">
+                            {{type.management_form}}
+                        </div>
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">
+                                Description
+                            </label>
+                            <div class="col-md-9">
+                                {{event.description|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">
+                                Start Date
+                            </label>
+                            <div class="col-md-3">
+                                {{event.start_date|as_crispy_field}}
+                            </div>
+                            <div class="col-md-1"></div>
+                            <label class = "small col-md-2 text-md-right mt-1">
+                                End Date
+                            </label>
+                            <div class="col-md-3">
+                                {{event.end_date|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">
+                                Location Name
+                            </label>
+                            <div class="col-md-9">
+                                {{location.name|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">
+                                Full Address
+                            </label>
+                            <div class="col-md-9">
+                                {{location.address|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <label class = "small col-md-2 text-md-right mt-1">
+                                Publish
+                            </label>
+                            <div class="col-md-9">
+                                {{event.is_published}}
+                            </div>
+                        </div>
+
+                        <div class="form-row mt-2">
+                            <div class="col-md-11 text-right">
+                                <input type="submit" class = "btn btn-dark-primary text-white btn-sm" value = "Create" name="create-post">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="type_empty_form" class = "d-none">
+        <div class="form-row">
+            <label class = "col-md-2"></label>
+            <div class="col-md-8">
+                {{type.empty_form.name|as_crispy_field}}
+            </div>
+            <div class="col-auto">
+                <a href="#" class = "btn btn-sm btn-danger btn-remove ">&times;</a>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+{% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+    <script>
+        $(function(){
+            $(".select2").select2()
+        })
+    </script>
+{% endblock js %}

@@ -119,7 +119,7 @@ class AllEvents(ListView):
         qs = super().get_queryset().filter(is_published = True)
 
         query = self.request.GET.get("q")
-        
+        code.interact(local = dict(globals(), **locals()))
         if query:
             return self.filter(qs, query)
         else:
@@ -144,7 +144,7 @@ class MyEvents(AllEvents):
         query = self.request.GET.get("q")
         qs = self.model.objects.all()
         slug = self.kwargs.get(self.slug_url_kwarg)
-        
+        code.interact(local = dict(globals(), **locals()))
         if slug is not None:
             qs =  qs.filter(organizer__user__slug = slug)
         else:
