@@ -15,17 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 
-from event.views import AllEvents
+from event.views import AllEvents, SaveEvent, DeleteSavedEvent
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name = 'base.html'), name = "home"),
+    path('', RedirectView.as_view(url = 'events/', permanent = True), name = "home"),
     path('accounts/', include('users.urls', namespace = "user")),
     
     path("events/", AllEvents.as_view(), name = "all-events" ),
+    path("events/<int:pk>/save/", SaveEvent.as_view(), name = "save-event"),
+    path('evennts/saved/<int:pk>/delete/', DeleteSavedEvent.as_view(), name= "delete-saved-event"),
     path('<slug:slug>/events/', include('event.urls', namespace = "event")),
     
     path('admin/', admin.site.urls),

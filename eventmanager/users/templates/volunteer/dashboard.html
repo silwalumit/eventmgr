@@ -13,14 +13,15 @@
         <h3 >My Saved Events and Organization</h3>
     </div>
 </div>
-<div class="row mt-4 m-1">
-    <div class="col-12 bg-dark-secondary p-3">
-        <h4>Your saved events</h4>
-    </div>
-</div>  
+<div id="saved-events">
+   
+</div>
+
 {% endblock main %}
 {% block js %}
     <script>
-
+        $(function(){
+            $("#saved-events").load("/accounts/dashboard/saved-events/")
+        });
     </script>
 {% endblock js %}

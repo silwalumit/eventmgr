@@ -38,9 +38,12 @@ let ajaxFormSubmit = function(form, modal) {
                     });
                     ajaxFormSubmit(form, modal);
                 } else {
-                    console.log(xhr.data, xhr)
-                    $("header").html(xhr.data);
-                    $(modal).modal('toggle');
+                    if (form_id == "login") {
+                        window.location = "/events/"
+                    }else{
+                        $("header").html(xhr.data);
+                        $(modal).modal('toggle');    
+                    }
                     toast();
                 }
             },

@@ -10,6 +10,9 @@ ul{
 body{
     color:#FFF !important;
 }
+button.xdsoft_prev{
+    color:#000 !important;
+}
 .modal-sm {
     max-width: 350px !important;
 }

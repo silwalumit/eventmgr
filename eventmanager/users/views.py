@@ -40,7 +40,7 @@ import json
 User = get_user_model()
 
 class Login(AjaxTemplateMixin, LoginView):
-    success_url= reverse_lazy("home")
+    success_url= reverse_lazy("all-events")
     ajax_template_name = "registration/login.html"
     form_class = UserLoginForm
     
@@ -336,7 +336,7 @@ class PasswordResetDone(PasswordResetDoneView):
 class PasswordResetComplete(PasswordResetCompleteView):
     template_name = "registration/password_rst_complete.html"
 
-class Dashboard(TemplateView):
+class Dashboard(LoginRequiredMixin,TemplateView):
     template_name = "volunteer/dashboard.html"
 
     def dispatch(self, request, *args, **kwargs):

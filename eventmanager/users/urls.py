@@ -1,6 +1,7 @@
 from django.urls import path, re_path
 from .views import *
 from django.views.generic import TemplateView
+from event.views import SavedEventsView, DeleteSavedEvent
 
 app_name = "user"
 
@@ -17,6 +18,9 @@ urlpatterns = [
         name = "activate"
     ),
     path('dashboard/', Dashboard.as_view(), name = "dashboard"),
+    
+    path('dashboard/saved-events/', SavedEventsView.as_view(), name = "saved-events"),
+   
     path('settings/', EditProfile.as_view(), name = "settings"),
     path('settings/changepassword/', ChangePassword.as_view(), name = "changepassword"),
     

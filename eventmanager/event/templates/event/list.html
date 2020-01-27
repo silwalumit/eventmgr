@@ -72,9 +72,18 @@
                     </div>
                     <div class = "bg-dark-secondary px-4 pb-2">
                         <a href="{% url 'event:detail' event.organizer.user.slug event.id %}" class = "small float-left">View more</a>
-                        {% if not request.user.is_volunteer or request.user == event.organizer.user %}
-                            <a href="{% url 'event:update' event.organizer.user.slug event.id %}" class = "float-right small">Edit</a>
-                        {% endif %} 
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.is_volunteer %}
+                            {% if event.saved_events.all.count > 0  %}
+                                <a href="#" class = "disabled btn rounded-pill btn-danger btn-sm float-right">Saved</a> 
+                            {%else%}
+                                <a href="{% url 'save-event' event.pk %}" class = "btn rounded-pill btn-danger btn-sm float-right">Save Event</a>
+                            {% endif %}
+                            {%endif%}
+                            {% if not request.user.is_volunteer and request.user == event.organizer.user %}
+                                <a href="{% url 'event:update' event.organizer.user.slug event.id %}" class = "float-right small">Edit</a>
+                            {% endif %} 
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -121,6 +121,7 @@ class VolunteerProfileForm(VolunteerCreationForm):
 
         super().__init__(*args,**kwargs)
         self.fields['bio'].widget.attrs.update({'rows':6})
+        self.fields['dob'].widget.attrs.update({'class':'datepicker'})
 
     class Meta:
         model = Volunteer

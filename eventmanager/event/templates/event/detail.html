@@ -43,12 +43,18 @@
                             Location: {{event.location.name}} | {{event.location.address}}
                         </span>
                         <div class="float-right small">
-                            {% if request.user.is_volunteer %}
-                                <a href="#" >Save Event</a>    
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_volunteer %}
+                                    {% if event.saved_events.all.count > 0 %}
+                                        <a href="#" class = "disabled btn rounded-pill btn-danger btn-sm">Saved</a> 
+                                    {%else%}
+                                        <a href="{% url 'save-event' event.pk %}" class = "btn rounded-pill btn-danger btn-sm">Save Event</a>   
+                                    {% endif %}
+                                {% endif %}
+                                {% if not request.user.is_volunteer and request.user == event.organizer.user %}
+                                    <a href="{% url 'event:update' event.organizer.user.slug event.id %}">Edit</a>
+                                {%endif%}
                             {% endif %}
-                            {% if not request.user.is_volunteer or request.user == event.organizer.user %}
-                                <a href="{% url 'event:update' event.organizer.user.slug event.id %}">Edit</a>
-                            {%endif%}
 
                         </div>
                     </div>

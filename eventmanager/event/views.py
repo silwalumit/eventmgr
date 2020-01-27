@@ -3,8 +3,7 @@ from django.db import transaction
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
-
-from django.views.generic.detail import SingleObjectMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.views.generic import(
     ListView,
@@ -21,9 +20,9 @@ from core.views import MultiFormsView
 
 from .forms import *
 from locations.forms import *
-
 import code 
-class CreateEvent(MultiFormsView):
+
+class CreateEvent(LoginRequiredMixin, MultiFormsView):
     template_name = "event/add.html"
     
     form_classes = {
@@ -119,7 +118,7 @@ class AllEvents(ListView):
         qs = super().get_queryset().filter(is_published = True)
 
         query = self.request.GET.get("q")
-        code.interact(local = dict(globals(), **locals()))
+        # code.interact(local = dict(globals(), **locals()))
         if query:
             return self.filter(qs, query)
         else:
@@ -136,7 +135,7 @@ class AllEvents(ListView):
         ).distinct()
         return queryset
 
-class MyEvents(AllEvents):
+class MyEvents(LoginRequiredMixin, AllEvents):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
@@ -144,7 +143,7 @@ class MyEvents(AllEvents):
         query = self.request.GET.get("q")
         qs = self.model.objects.all()
         slug = self.kwargs.get(self.slug_url_kwarg)
-        code.interact(local = dict(globals(), **locals()))
+        # code.interact(local = dict(globals(), **locals()))
         if slug is not None:
             qs =  qs.filter(organizer__user__slug = slug)
         else:
@@ -155,7 +154,6 @@ class MyEvents(AllEvents):
         else:
             return qs
 
-
 class EventDetailView(DetailView):
     model = Event
     template_name = "event/detail.html"
@@ -165,10 +163,10 @@ class EventDetailView(DetailView):
         pk = self.kwargs.get(self.pk_url_kwarg)
         return self.model.objects.get(id = pk)
 
-class SavedEventsView(ListView):
+class SavedEventsView(LoginRequiredMixin, ListView):
     model = SavedEvent
-    template_name = "event/saved_events.html"
-    context_object_name = "events_list"
+    template_name = "volunteer/saved_events.html"
+    context_object_name = "saved_events"
     paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
@@ -180,3 +178,31 @@ class SavedEventsView(ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(volunteer = self.volunteer)
+
+from django.views.generic import View
+class SaveEvent(LoginRequiredMixin, View):
+
+    @transaction.atomic
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        if pk:
+            event = Event.objects.filter(id = pk)
+        else:
+            event = None
+
+        if request.user.is_volunteer and event.exists():
+            obj, created = SavedEvent.objects.get_or_create(
+                event = event.get(),
+                volunteer = request.user.volunteer
+            )
+
+            request.user.volunteer.events.add(event.get())
+            request.user.volunteer.save()
+            return HttpResponseRedirect(reverse("user:dashboard"))
+        else:
+            return HttpResponseRedirect(reverse("all-events"))
+
+from django.views.generic import DeleteView
+class DeleteSavedEvent(LoginRequiredMixin, DeleteView):
+    model = SavedEvent
+    success_url = reverse_lazy("user:dashboard")
