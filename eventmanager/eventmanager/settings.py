@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     # local apps
     'users',
-
+    'event',
+    'locations',
     # third pary apps
     'crispy_forms',
 ]

@@ -15,7 +15,7 @@ $(function () {
             success: function(data, status, jqXHR){  
                 $("#form-modal-body").html(data);
                 $("#modal-form").modal("show");
-                ajaxFormSubmit("#form-modal-body form", "#modal-form")
+                ajaxFormSubmit("#form-modal-body form.ajax-submit", "#modal-form")
             },
         });
     });
@@ -38,7 +38,7 @@ let ajaxFormSubmit = function(form, modal) {
                     });
                     ajaxFormSubmit(form, modal);
                 } else {
-                    console.log(xhr.data)
+                    console.log(xhr.data, xhr)
                     $("header").html(xhr.data);
                     $(modal).modal('toggle');
                     toast();

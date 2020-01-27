@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load defaulttags %}
+{% block main %}
+<div class="row ">
+    <div class="col-lg-8 col-md-12 m-auto">
+        <div class="row mt-2 mb-2">
+            <div class="col-12 d-flex align-items-strech">
+                <div class="card border-0 w-100">
+
+                    <div class="card-header bg-dark-primary text-white">
+                        <h5>
+                            {{event.title}}
+                            <span class = "small text-muted">
+                                by {{event.organizer.name}}
+                            </span>
+                        </h5>
+                        {% if event.is_published %}
+                            <span class = "small text-muted">{{event.timestamp|timesince}} ago</span>
+                        {% else %}
+                            <span class = "text-danger small">
+                                Draft
+                            </span>
+                        {% endif %}
+                        <div>
+                            <span class = "float-left small">
+                                <strong>Starts On:</strong> {{event.start_date}}
+                            </span>
+                            <span class = "float-right small">
+                                <strong>Ends On:</strong> {{event.end_date}}
+                            </span>
+                        </div>
+
+                    </div>
+                    <img class="card-img-top img-fluid" src="{{event.banner_image.url}}" alt="{{event.title}}">
+                    <div class="card-body bg-dark-secondary text-white">
+
+                        <p class = "card-text text-justify">
+                            {{event.description}}
+                        </p>
+                    </div>
+                    <div class = "bg-dark-secondary px-4 pb-2">
+                        <span class = "float-left small font-weight-bold">
+                            Location: {{event.location.name}} | {{event.location.address}}
+                        </span>
+                        <div class="float-right small">
+                            {% if request.user.is_volunteer %}
+                                <a href="#" >Save Event</a>    
+                            {% endif %}
+                            {% if not request.user.is_volunteer or request.user == event.organizer.user %}
+                                <a href="{% url 'event:update' event.organizer.user.slug event.id %}">Edit</a>
+                            {%endif%}
+
+                        </div>
+                    </div>
+                    <div class="card-footer bg-dark-primary d-flex small">
+                        <label class = "mr-2">Tags:</label>
+                        {% for type in event.types.all %}
+                            <a href="{% url 'all-events' %}?tag={{type.name|urlify}}" class = "mx-1" style = "text-decoration:underline">{{type}}</a> |
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

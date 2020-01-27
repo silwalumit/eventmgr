@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 
-<form action="{% url 'user:signup_org' %}" method = "post">
+<form action="{% url 'user:signup_org' %}" method = "post" class="ajax-submit">
     
     {% csrf_token %}
     {{organizer|crispy}}
@@ -25,12 +25,9 @@
         <div class="col-12 mb-2">{{user.password1}}</div>
         <div class="col-12">{{user.password2|as_crispy_field}}</div>
     </div>
-    <div class="modal-footer">
-       
+    <div class="row">
+        <div class="col-auto ml-auto">
             <input type="submit" name="addvolunteer" value="Sign Up" class = "btn btn-success"/>
-        
-            <button type="button" name="close" class = "btn btn-secondary" data-dismiss="modal">Close</button>
-      
+        </div>
     </div>
-    
 </form>

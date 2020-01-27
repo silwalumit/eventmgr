@@ -11,10 +11,15 @@
             {% endif %}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            {% if request.user.is_volunteer %}
+                <a class="dropdown-item" href="{% url 'user:dashboard' %}">
+                    Dashboard
+                </a>    
+            {% endif %}
             <a class="dropdown-item" href="{% url 'user:settings' %}">
               Profile Settings
             </a>
-            <a class="dropdown-item show-form" href="{% url 'user:changepassword' %}">
+            <a class="dropdown-item show-form" href="{% url 'user:changepassword' %}" data-class = "modal-sm">
               Change Password
             </a>
             <a class="dropdown-item text-white" href="{% url 'user:logout' %}"> Logout

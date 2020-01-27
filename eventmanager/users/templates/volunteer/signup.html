@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-<form action="{% url 'user:signup_volunteer' %}" method = "post">
+<form action="{% url 'user:signup_volunteer' %}" method = "post" class="ajax-submit">
     <div class="form-row">
         {% csrf_token %}
         <div class="col-12">{{volunteer.first_name|as_crispy_field}}</div>

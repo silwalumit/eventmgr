@@ -45,6 +45,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
+
     email = models.EmailField(
         verbose_name = _('email address'),
         max_length = 255,
@@ -82,12 +83,32 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 class Volunteer(models.Model):
+    id = models.BigAutoField(
+        primary_key=True,
+        verbose_name = "ID",
+    )
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE,
         related_name = "volunteer",
         related_query_name = "volunteer"
     )
+
+    organizers = models.ManyToManyField(
+        "Organizer",
+        verbose_name = _("Organizers"),
+        through =  "Subscription",
+        # through_fields = ("volunteer", "organizer",),
+    )
+
+    events = models.ManyToManyField(
+        "event.Event",
+        verbose_name = _("Events"),
+        through = "event.SavedEvent",
+        # through_fields = ("volunteer", "event",),
+    )
+
     first_name = models.CharField(
         verbose_name = _("first name"), 
         max_length=50
@@ -171,3 +192,27 @@ class OrganizationContact(models.Model):
 def set_slug(sender, instance, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_gen(instance, instance.email.split('@')[0])
+
+class Subscription(models.Model):
+    id = models.BigAutoField(
+        primary_key=True,
+        verbose_name = "ID",
+    )
+
+    volunteer = models.ForeignKey(
+        Volunteer,
+        verbose_name = _("Volunteer"),
+        on_delete = models.CASCADE,
+        related_name="subscriptions",
+        related_query_name = "subscription"
+    )
+
+    organizer = models.ForeignKey(
+        Organizer,
+        verbose_name = _("Organizer"),
+        on_delete = models.CASCADE,
+        related_name = "subscribers",
+        related_query_name = "subscriber"
+    )
+
+
