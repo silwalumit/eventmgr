@@ -35,7 +35,7 @@ from django.contrib.auth import (
     login, 
     # logout
 )
-import json
+import json, code
 
 User = get_user_model()
 
@@ -232,11 +232,12 @@ class ChangePassword(LoginRequiredMixin, AjaxableResponseMixin,PasswordChangeVie
     
     return super().form_valid(form)
 
-
+from locations.forms import LocationForm
 class EditProfile(LoginRequiredMixin, MultiFormsView):
 
     form_classes = {
-        'user': UserProfile
+        'user': UserProfile,
+        'location': LocationForm
     }
     success_url = reverse_lazy("user:settings")
 
@@ -263,6 +264,9 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
         kwargs = super().get_form_kwargs(form_name)
         if form_name == 'user':
             kwargs.update({'instance':self.user})
+        elif form_name == "location":
+            if self.user.location:
+                kwargs.update({'instance':self.user.location})
         else:
             if self.user.is_volunteer:
                 kwargs.update({'instance':self.user.volunteer})
@@ -271,13 +275,14 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
                     kwargs.update({'instance':self.user.organizer.contact})
                 else:
                     kwargs.update({'instance':self.user.organizer})
-
         return kwargs
 
     @transaction.atomic
-    def forms_valid(self, forms):
+    def form_valid(self, forms):
         self.object = forms['user'].save(commit = False)
-        self.object.save(update_fields = ('avatar',))
+        location = forms['location'].save()
+        self.object.location = location
+        self.object.save(update_fields = ('avatar','location',))
 
         if self.object.is_volunteer:
             volunteer = forms['volunteer'].save()
@@ -285,7 +290,7 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
             organizer = forms['organizer'].save()
             contact = forms['contact'].save()
         messages.success(self.request, "Profile successfully updated.")
-        return super().forms_valid(forms)
+        return super().form_valid(forms)
 
 
 from django.contrib.auth.views import(
@@ -377,26 +382,4 @@ class MyVolunteers(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(
             subscription__organizer = self.organizer
-        )
-
-class EventSpecifcVolunteers(LoginRequiredMixin, ListView):
-    model = Volunteer
-    template_name = "organizer/event_volunteers.html"
-    context_object_name = "volunteers_list"
-    id = None
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_volunteer:
-            return HttpResponseRedirect("home")
-        else:
-            id = kwargs.get("id")
-            if id:
-                self.id = id     
-                return super().dispatch(request, *args, **kwargs)
-            else:
-                return HttpResponseRedirect(reverse("event:my-events"))
-
-    def get_queryset(self):
-        return super().get_queryset().filter(
-            saved_event__event__id = self.id
         )

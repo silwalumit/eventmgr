@@ -125,7 +125,7 @@ class VolunteerProfileForm(VolunteerCreationForm):
 
     class Meta:
         model = Volunteer
-        exclude = ('user',)
+        exclude = ('user','organizers', 'events',)
 
 class UserProfile(forms.ModelForm):
     class Meta:

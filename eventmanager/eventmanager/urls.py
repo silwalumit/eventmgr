@@ -20,11 +20,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from event.views import AllEvents, SaveEvent, DeleteSavedEvent
+from users.views import VolunteerList, OrganizerList
 
 urlpatterns = [
     path('', RedirectView.as_view(url = 'events/', permanent = True), name = "home"),
     path('accounts/', include('users.urls', namespace = "user")),
     
+    path("volunteers/", VolunteerList.as_view(), name = "volunteers"),
+    path("organizers/", OrganizerList.as_view(), name = "organizers"),
+
     path("events/", AllEvents.as_view(), name = "all-events" ),
     path("events/<int:pk>/save/", SaveEvent.as_view(), name = "save-event"),
     path('evennts/saved/<int:pk>/delete/', DeleteSavedEvent.as_view(), name= "delete-saved-event"),

@@ -12,6 +12,7 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 from core.utils import unique_slug_gen
+from locations.models import Location
 
 def upload_dir(instance, fielname):
     return "user_{0}_{1}".format(instance.id, fielname)
@@ -50,6 +51,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('email address'),
         max_length = 255,
         unique = True,
+    )
+    
+    location = models.OneToOneField(
+        Location,
+        on_delete = models.SET_NULL,
+        null = True,
+        related_name='user',
+        related_query_name = 'user'
     )
 
     is_active = models.BooleanField(_('active'),default = False)

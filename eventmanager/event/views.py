@@ -220,3 +220,31 @@ class DeleteSavedEvent(LoginRequiredMixin, DeleteView):
     model = SavedEvent
     success_url = reverse_lazy("user:dashboard")
 
+from users.models import Volunteer
+class EventSpecifcVolunteers(LoginRequiredMixin, ListView):
+    model = Volunteer
+    template_name = "organizer/event_volunteers.html"
+    context_object_name = "volunteers_list"
+    event = None
+    paginate_by = 10
+
+    extra_context = {
+        "event":event
+    }
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_volunteer:
+            return HttpResponseRedirect("home")
+        else:
+            id = kwargs.get("id")
+            self.event = Event.objects.filter(id = id)
+            if self.event.exists():
+                self.event = self.event.get()
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                return HttpResponseRedirect(reverse("event:my-events"))
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            saved_event__event = self.event
+        )
