@@ -7,24 +7,32 @@
                 <form action="" method = "get">
                     <div class="form-row">
                         <div class="col-12 ">
-                            <input type="text" class="form-control" id="Search"  name = "q" placeholder="Search" value = "{{request.GET.q}}">    
+                            <input type="text" class="form-control" id="Search"  name = "title" placeholder="Search by event name" value = "{{request.GET.title}}">    
                         </div>
                     </div>
                     <div class="collapse mt-2" id = "advanced-search">
                         <div class="form-row">
+                            {% block org %}
                             <div class="col-md-6">
                                 <input type="text" name = "org" value = "{{request.GET.org}}" placeholder="Search by organization" class = "form-control ">
-                            </div>
+                            </div>    
+                            {% endblock org %}
+
                             <div class="col-md-6">
                                 <input type="text" name = "location" value = "{{request.GET.location}}" placeholder="Search by location" class = "form-control ">
                             </div>
+                            {% block tag %}
+                                
+                            {% endblock tag %}
                         </div>
+                        {% block remove_tag %}
                         <div class="form-row mt-2">
                             <div class="col-md-6">
                                 <input type="text" name = "tag" value = "{{request.GET.tag}}" placeholder="Search by tag" class = "form-control ">
-                            </div>
-                           
-                        </div>
+                            </div>                          
+                        </div>    
+                        {% endblock remove_tag %}
+                        
                     </div>
                     <div class="form-row mt-2">
                         <div class = "col-auto ml-auto mt-1">

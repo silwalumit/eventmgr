@@ -1,6 +1,6 @@
 {% if not request.user.is_authenticated %}
-    <a class = "show-form nav-item nav-link btn btn-primary mr-md-2 shadow-sm rounded" href="{% url 'user:login' %}" title = "Sign In" data-class = "modal-sm" id = "login">Sign In</a>
-    <a class = "show-form nav-item nav-link btn btn-primary shadow-sm rounded my-md-0 my-2" href="{% url 'user:signup' %}" title = "Sign Up" data-class = "modal-sm">Sign Up</a>
+    <a class = "show-form nav-item nav-link btn btn-danger mr-md-2 shadow-sm rounded-pill" href="{% url 'user:login' %}" title = "Sign In" data-class = "modal-sm" id = "login">Sign In</a>
+    <a class = "show-form nav-item nav-link btn btn-danger shadow-sm rounded-pill my-md-0 my-2" href="{% url 'user:signup' %}" title = "Sign Up" data-class = "modal-sm">Sign Up</a>
 {%else%}
     <div class="nav-item dropdown " >
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

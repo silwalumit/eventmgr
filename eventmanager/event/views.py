@@ -117,40 +117,53 @@ class AllEvents(ListView):
     def get_queryset(self):
         qs = super().get_queryset().filter(is_published = True)
 
-        query = self.request.GET.get("q")
-        # code.interact(local = dict(globals(), **locals()))
-        if query:
-            return self.filter(qs, query)
+        if self.request.GET:
+            return self.filter(qs, self.request.GET)
         else:
             return  qs
 
 
     def filter(self, qs, query):
-        queryset = qs.filter(
-            Q(title__istartswith = query) |
-            Q(description__icontains = query) |
-            Q(types__name__icontains = query) |
-            Q(location__name__icontains = query) |
-            Q(organizer__name__icontains = query)
-        ).distinct()
+        
+        q = {}
+        if query.get("title"):
+            q["title__icontains"] = query["title"]
+        if query.get("org"):
+            q["organizer__name__iexact"] = query["org"]
+        if query.get("tag"):
+            q["types__name__iexact"] = query["tag"]
+        if query.get("location"):
+            q["location__name__icontains"] = query["location"]
+            # q["location__address__icontains"] = query["location"]
+
+       
+        queryset = qs.filter(**q).distinct()
+        # queryset = qs.filter(
+        #     Q(title__icontains = query["title"])|
+        #     Q(organizer__name__iexact = query["org"])|
+        #     Q(types__name__iexact = query["tag"])|
+        #     Q(location__name__icontains = query["location"])|
+        #     Q(location__address__icontains = query["location"])
+        # ).distinct()
+        code.interact(local = dict(globals(), **locals()))
         return queryset
 
 class MyEvents(LoginRequiredMixin, AllEvents):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
+    template_name = "event/my_events.html"
 
     def get_queryset(self):
-        query = self.request.GET.get("q")
         qs = self.model.objects.all()
         slug = self.kwargs.get(self.slug_url_kwarg)
-        # code.interact(local = dict(globals(), **locals()))
+
         if slug is not None:
             qs =  qs.filter(organizer__user__slug = slug)
         else:
             qs =  qs
 
-        if query:
-            return self.filter(qs, query)
+        if self.request.GET:
+            return self.filter(qs, self.request.GET)
         else:
             return qs
 
