@@ -145,7 +145,7 @@ class AllEvents(ListView):
         #     Q(location__name__icontains = query["location"])|
         #     Q(location__address__icontains = query["location"])
         # ).distinct()
-        code.interact(local = dict(globals(), **locals()))
+        # code.interact(local = dict(globals(), **locals()))
         return queryset
 
 class MyEvents(LoginRequiredMixin, AllEvents):
@@ -219,3 +219,4 @@ from django.views.generic import DeleteView
 class DeleteSavedEvent(LoginRequiredMixin, DeleteView):
     model = SavedEvent
     success_url = reverse_lazy("user:dashboard")
+

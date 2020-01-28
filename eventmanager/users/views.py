@@ -344,3 +344,59 @@ class Dashboard(LoginRequiredMixin,TemplateView):
             return super().dispatch(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse("user:settings"))
+
+from django.views.generic import ListView
+class OrganizerList(ListView):
+    model = Organizer
+    template_name = "organizer/list.html"
+    context_object_name = "organizers"
+
+class VolunteerList(LoginRequiredMixin, ListView):
+    model = Volunteer
+    template_name = "volunteer/list.html"
+    context_object_name = "volunteers_list"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_volunteer:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse("home"))
+
+class MyVolunteers(LoginRequiredMixin, ListView):
+    model = Volunteer
+    template_name = "organizer/my_volunteers.html"
+    context_object_name = "volunteers_list"
+    
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_volunteer:
+            return HttpResponseRedirect("home")
+        else:
+            self.organizer = self.request.user.organizer
+            return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            subscription__organizer = self.organizer
+        )
+
+class EventSpecifcVolunteers(LoginRequiredMixin, ListView):
+    model = Volunteer
+    template_name = "organizer/event_volunteers.html"
+    context_object_name = "volunteers_list"
+    id = None
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_volunteer:
+            return HttpResponseRedirect("home")
+        else:
+            id = kwargs.get("id")
+            if id:
+                self.id = id     
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                return HttpResponseRedirect(reverse("event:my-events"))
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            saved_event__event__id = self.id
+        )

@@ -1,0 +1,14 @@
+{% extends "event/list.html" %}
+{% block org %}
+    
+{% endblock org %}
+
+{% block tag %}
+<div class="col-md-6">
+    <input type="text" name = "tag" value = "{{request.GET.tag}}" placeholder="Search by tag" class = "form-control ">
+</div>
+{% endblock tag %}
+
+{% block remove_tag %}
+    
+{% endblock remove_tag %}
