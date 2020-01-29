@@ -14,11 +14,7 @@
             </a>
         {% endif %}
         <a class="nav-item nav-link text-white" href="{% url 'organizers' %}">Search Organizations</a>
-        {% if request.user.is_authenticated and not request.user.is_volunteer %}
-            <a href="{% url 'event:add' request.user.slug %}">Add Event</a>
-            <a href="{% url 'event:my-events' request.user.slug %}">My Events</a>
-            
-        {% endif %}
+
     </div>
     <div class="navbar-nav">
         {% include "accounts_option.html" %}

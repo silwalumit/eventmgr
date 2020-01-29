@@ -12,3 +12,16 @@
 {% block remove_tag %}
     
 {% endblock remove_tag %}
+{% block edit %}
+    {% if request.user.is_authenticated and not request.user.is_volunteer and request.user == event.organizer.user %}
+        <a href="{% url 'event:update' event.organizer.user.slug event.id %}" class = "float-right btn btn-sm btn-outline-danger rounded-pill">Edit</a>
+    {% endif %} 
+{% endblock edit %}
+{% block volunteer %}
+    <a href="{% url 'event:event-volunteers' event.organizer.user.slug event.id %}" class = "float-left mx-2 btn btn-sm btn-outline-danger rounded-pill">
+        Volunteers <span class="badge badge-danger ">
+            {{event.saved_events.all.count}}
+        </span>
+    </a>
+
+{% endblock volunteer %}

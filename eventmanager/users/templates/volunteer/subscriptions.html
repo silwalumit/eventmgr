@@ -1,43 +1,31 @@
 <div class="row mt-4 mx-1">
     <div class="col-12 bg-dark-secondary p-3">
         <h4>
-            Your saved events
+            Your saved organizations
             <span class="badge badge-danger rounded-circle">{{events_list.all.count}}</span>
         </h4>
     </div>
 </div>
 <div class="form-row my-4">
-{% for saved_event in saved_events %}
+{% for subscription in subscriptions %}
     <div class="col-lg-4 col-md-6 d-flex align-items-strech">
         <div class="card card border-0 w-100 rounded">
             <div class="card-header bg-dark-primary text-white">
                 <h6 class = "float-left">
-                    {{saved_event.event.title}}
-                    <span class = "small text-muted">
-                        by {{saved_event.event.organizer.name}}
-                    </span>
+                    {{subscription.organizer.name}}
                 </h6>
-                
-                <span class = "clearfix"></span>
-                <span class = " small">
-                    {{saved_event.event.start_date}}-{{saved_event.event.end_date}}
-                </span>
             </div>
-            {% if saved_event.event.banner_image %}
-                <img class="card-img-top img-fluid" src="{{saved_event.event.banner_image.url}}" alt="{{saved_event.event.title}}" />
-            {% endif %}
             <div class="card-body bg-dark-secondary text-white">
                 <p class = "card-text">
-                    {{saved_event.event.description|truncatechars_html:50}}
+                    {{subscription.organizer.description}}
                 </p>
             </div>
             <div class = "bg-dark-secondary px-4 pb-2">
-                <a href = "#" class = "disabled btn btn-sm rounded-pill btn-danger float-right">Saved</a>
-                <form action="{% url 'delete-saved-event' saved_event.id %}" method = "post">
+                <a href = "#" class = "disabled btn btn-sm rounded-pill btn-danger float-right">Subscribed</a>
+                <form action="{% url 'delete-subscription' subscription.id %}" method = "post">
                     {% csrf_token %}
                     <button type = "submit" class = "float-right btn btn-outline-danger btn-sm rounded-pill mx-2">Delete</button>
                 </form>
-                <a href="{% url 'event:detail' saved_event.event.organizer.user.slug saved_event.event.id %}" class = "float-left btn btn-outline-danger btn-sm rounded-pill">View more</a>
             </div>
         </div>
     </div>
@@ -45,8 +33,8 @@
     <div class="col-lg-4 col-md-6 d-flex align-items-strech">
         <div class="card card border-0 w-100 rounded">
             <div class="card-body bg-dark-secondary">
-                <h3 class = "text-center py-3">You have no saved events yet</h3>
-                <p class = "text-center py-3">Once you find interesting volunteering events you can save them here.</p>
+                <h3 class = "text-center py-3">You have no subscribed organizations</h3>
+                <p class = "text-center py-3">Once you find interesting organizations you can save them here.</p>
             </div>
         </div>
     </div>
@@ -54,9 +42,9 @@
     <div class="col-lg-4 col-md-6 d-flex align-items-strech">
         <div class="card card border-0 w-100 ">
             <div class="card-body d-flex align-items-strech p-0 bg-dark-secondary">
-                <a href = "{% url 'all-events' %}" class = " btn card-body bg-dark-secondary" role= "button">
+                <a href = "{% url 'organizers' %}" class = " btn card-body bg-dark-secondary" role= "button">
                     <span class = "btn btn-outline-danger rounded-pill">
-                        Find Events
+                        Find Organization
                     </span>
                 </a>
 

@@ -20,7 +20,8 @@ urlpatterns = [
     path('dashboard/', Dashboard.as_view(), name = "dashboard"),
     
     path('dashboard/saved-events/', SavedEventsView.as_view(), name = "saved-events"),
-   
+    path('dashboard/subscriptions/', SubscribedOrganization.as_view(), name = "subscriptions"),
+
     path('settings/', EditProfile.as_view(), name = "settings"),
     path('settings/changepassword/', ChangePassword.as_view(), name = "changepassword"),
     

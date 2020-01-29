@@ -25,3 +25,5 @@ class VolunteerAdmin(admin.ModelAdmin):
 @admin.register(Organizer)
 class OrganizerAdmin(admin.ModelAdmin):
     list_display = ['user', 'name']
+
+admin.site.register(Subscription)

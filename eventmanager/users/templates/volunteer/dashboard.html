@@ -17,11 +17,16 @@
    
 </div>
 
+<div id = "subscriptions">
+    
+</div>
+
 {% endblock main %}
 {% block js %}
     <script>
         $(function(){
             $("#saved-events").load("/accounts/dashboard/saved-events/")
+            $("#subscriptions").load("/accounts/dashboard/subscriptions/")
         });
     </script>
 {% endblock js %}

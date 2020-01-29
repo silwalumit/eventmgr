@@ -1,1 +1,38 @@
-{% extends "organizer/event_volunteers.html" %}
+{% extends "base.html" %}
+{% block main %}
+    <div class="row shadow m-1 mt-4">
+        <div class="col-12 bg-dark-secondary p-5">
+            <h3 class = "display-4 text-white text-right">
+              Volunteers
+            </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-md-12 m-auto ">
+            <div class="form-row">
+                <div class="col-12 p-2 bg-dark-secondary">
+                    <form action="" method = "get">
+                        <div class="form-row mx-2 my-2">
+                            <div class="col-md-6">
+                                <input type="text" name = "location" value = "{{request.GET.location}}" placeholder="Search by location name" class = "form-control ">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" name = "address" value = "{{request.GET.address}}" placeholder="Search by location full address" class = "form-control ">
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <div class="col-auto ml-auto">
+                                <input type="submit" name = "search" value = "Search" class = "btn btn-sm btn-outline-primary rounded-pill "/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "volunteer/list_inner.html" %}
+    {% include "paginator.html"%}
+{% endblock main %}
+{% block js %}
+
+{% endblock js %}

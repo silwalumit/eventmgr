@@ -31,7 +31,7 @@ class CreateEvent(LoginRequiredMixin, MultiFormsView):
         "type":TypeCreationFormset
     }
 
-    prefixes = {
+    prefix = {
         "event":"event",
         "location":"location",
         "type":"type"
@@ -66,9 +66,12 @@ class CreateEvent(LoginRequiredMixin, MultiFormsView):
         event.organizer = self.organizer
         event.location = location
         event.save()
+        forms['event'].save_m2m()
+        # code.interact(local = dict(globals(), **locals()))
 
-        event.types.add(*event_type)
-        event.save()
+        if event_type:
+            event.types.add(*event_type)
+            event.save()
         
         return HttpResponseRedirect(self.get_success_url())
 
@@ -134,6 +137,8 @@ class AllEvents(ListView):
             q["types__name__iexact"] = query["tag"]
         if query.get("location"):
             q["location__name__icontains"] = query["location"]
+        if query.get("id"):
+            q["organizer__id"] = query.get("id")
             # q["location__address__icontains"] = query["location"]
 
        
@@ -180,7 +185,7 @@ class SavedEventsView(LoginRequiredMixin, ListView):
     model = SavedEvent
     template_name = "volunteer/saved_events.html"
     context_object_name = "saved_events"
-    paginate_by = 10
+    paginate_by = 5
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_volunteer:
@@ -228,10 +233,6 @@ class EventSpecifcVolunteers(LoginRequiredMixin, ListView):
     event = None
     paginate_by = 10
 
-    extra_context = {
-        "event":event
-    }
-
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_volunteer:
             return HttpResponseRedirect("home")
@@ -240,11 +241,33 @@ class EventSpecifcVolunteers(LoginRequiredMixin, ListView):
             self.event = Event.objects.filter(id = id)
             if self.event.exists():
                 self.event = self.event.get()
+                self.extra_context = {
+                    "event": self.event
+                }
                 return super().dispatch(request, *args, **kwargs)
             else:
                 return HttpResponseRedirect(reverse("event:my-events"))
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        qs = super().get_queryset().filter(
             saved_event__event = self.event
         )
+        query = self.request.GET
+        
+        if query:
+            return self.filter(qs, query)
+        else:
+            return qs 
+
+    def filter(self, qs ,query):
+        q = {}
+
+        location = query.get('location')
+        address = query.get('address')
+
+        if location:
+            q["user__location__name"] = location
+
+        if address:
+            q["user__location__address"] = address   
+        return qs.filter(**q)

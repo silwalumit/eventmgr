@@ -155,6 +155,9 @@ class Volunteer(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
+    class Meta:
+        ordering = ["first_name", "last_name", ]
+
 class Organizer(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -169,6 +172,9 @@ class Organizer(models.Model):
         verbose_name = _("name of organization")
     )
     description = models.TextField()
+
+    class Meta:
+        ordering = ["name",]
 
 
 class OrganizationContact(models.Model):

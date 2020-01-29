@@ -48,10 +48,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
     <script src="{% static 'js/datetimepicker.js' %}"></script>
+    
     <script src = "{% static 'js/base.js' %}"></script>
-
+    <script src = "{% static 'js/ajax_form_handling.js'%}"></script>
+    <script src = "{%static 'js/formset.js'%}"></script>
     {% block js %}
     {% endblock js %}
-    <script src = "{% static 'js/ajax_form_handling.js'%}"></script>
+    
 </body>
 </html>

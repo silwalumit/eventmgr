@@ -1,46 +1,120 @@
 {% extends "base.html" %}
 {% block main %}
-<div class="row shadow m-1 mt-4">
-    <div class="col-12 bg-dark-secondary p-5">
-        <h3 class = "display-4 text-white text-right">
-          Organizers
-        </h3>
-    </div>
-</div>
-<div class="row mt-4  m-1">
-  <div class="col-lg-6 col-md-8 col-auto">
-    <div class="card">
-      <table class = "table table-sm table-striped small">
-        <thead class = "thead-dark">
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope = "col"></th>
-            <th scope = "col">Location</th>
-            <th scope = "col">Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for organizer in organizers %}
-            <tr>
-              <td>{{organizer.name}}</td>
-              <td>{{organizer.user.name}}</td>
-             
-              <td>{{organizer.user.location.name}}</td>
-              <td>{{organizer.user.location.address}}</td>
-            </tr>
-          {%empty%}
-          <tr>
-            <td colspan="3">There are no organizers yet</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+<div class="row m-1 mt-4">
+  <div class="col-lg-8 m-auto">
+    <div class="row">
+      <div class="col-12 bg-dark-secondary p-4 pr-3">
+          <h3 class = "display-4 text-white text-right">
+            Organizers
+          </h3>
+      </div>  
     </div>
   </div>
+    
 </div>
+<div class="row">
+    <div class="col-lg-8 col-md-12 m-auto ">
+      <div class="form-row">
+            <div class="col-12 p-2 bg-dark-secondary">
+                <form action="" method = "get">
+                    <div class="form-row">
+                        <div class="col-6 ">
+                            <input type="text" class="form-control" id="Search"  name = "location" placeholder="Search by location name" value = "{{request.GET.location}}">
+                        </div>
+                        <div class="col-md-6 mt-sm-2 mt-md-0">
+                          <input type="text" name = "address" value = "{{request.GET.address}}" placeholder="Search by location" class = "form-control ">
+                        </div>
+                    </div>
+                    <div class="collapse mt-2" id = "advanced-search">
+                        <div class="form-row">
+                            
+                        </div>
+                    </div>
+                    <div class="form-row mt-2">
+                        <div class="col-auto ml-auto">
+                            <input type="submit" name = "search" value = "Search" class = "btn btn-outline-primary btn-sm rounded-pill "/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+      <div class="form-row my-2">
+        {% for organizer in organizers %}
+          <div class="col-md-12 d-flex align-items-strech mt-2">
+              <div class="card card border-0 w-100">
+                  <div class="card-header bg-dark-primary text-white">
+                      <h6>
+                          {{organizer.name}}
+                      </h6>
+                  </div>
+                  <div class="card-body bg-dark-secondary text-white">
+                      <p class = "card-text">
+                          {{organizer.description}}
+                      </p>
+                      <ul class = "list-unstyled small font-weight-bold">
+                        <li>
+                            Primary Contact Number:
+                            {{organizer.contact.primary_no}}
+                        </li>
+                        {% if  organizer.contact.secondary_no%}
+                          <li>
+                            Secondary Contact No:
+                            {{organizer.contact.secondary_no}}
+                          </li>
+                        {% endif %}
+                        {% if  organizer.contact.website%}
+                          <li>
+                            <a href="{{organizer.contact.website}}" target = "_blank">
+                              Website
+                            </a>
+                          </li>
+                        {% endif %}
+                        {% if  organizer.contact.facebook%}
+                          <li>
+                            <a href="{{organizer.contact.facebook}}" target = "_blank">
+                              Facebook
+                            </a>
+                          </li>
+                        {% endif %}
+                        {% if  organizer.contact.twitter%}
+                          <li>
+                            <a href="{{organizer.contact.twitter}}" target = "_blank">
+                              Twitter
+                            </a>
+                          </li>
+                        {% endif %}
+                        {% if  organizer.contact.instagram%}
+                          <li>
+                            <a href="{{organizer.contact.instagram}}" target = "_blank">
+                              Instagram
+                            </a>
+                          </li>
+                        {% endif %}
+                      </ul>
+                  </div>
+                  <div class = "bg-dark-secondary px-4 pb-2">
+                      <span class = "small font-weight-bold">
+                          Location: {{organizer.user.location.name}} | {{organizer.user.location.address}}
+                      </span>
+                      <div class="mt-2"></div>
+                      <a href = "{% url 'all-events' %}?org={{organizer.name}}&id={{organizer.id}}" class = "btn btn-sm rounded-pill btn-outline-danger float-left  ">
+                        Events <span class = "badge badge-danger" >{{organizer.events.all.count}}</span>
+                      </a>
+                      {% if request.user.is_authenticated and  request.user.is_volunteer %}
+                        {% if organizer.subscribers.all.count > 0 %}
+                        <a href="#" class = "disabled float-right btn btn-danger btn-sm rounded-pill">Subscribed</a>  
+                        {%else%}
+                        <a href="{% url 'subscribe' organizer.id %}" class = "float-right btn btn-outline-danger btn-sm rounded-pill">Subscribe</a>  
+                        {% endif %}
+                        
+                      {% endif %}
+                  </div>
+              </div>
+          </div>
+      {%endfor%}
+    </div>
+  </div> 
+</div>
+{% include "paginator.html" %} 
 
 {% endblock main %}
-{% block js %}
-
-{% endblock js %}

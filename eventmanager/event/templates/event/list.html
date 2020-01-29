@@ -39,7 +39,7 @@
                             <a href = "#advanced-search" class = "text-muted small" data-toggle = "collapse" >Advanced Search</a>
                         </div>
                         <div class="col-auto">
-                            <input type="submit" name = "search" value = "Search" class = "btn btn-dark-primary text-white "/>
+                            <input type="submit" name = "search" value = "Search" class = "btn btn-outline-primary btn-sm rounded-pill "/>
                         </div>
                     </div>
                 </form>
@@ -47,7 +47,7 @@
         </div>
         <div class="form-row mt-2 mb-2">
             {% for event in events_list %}
-            <div class="col-lg-6 d-flex align-items-strech">
+            <div class="col-md-12 d-flex align-items-strech mt-2">
                 <div class="card border-0 w-100">
                     <div class="card-header bg-dark-primary text-white">
                         <h5>
@@ -72,14 +72,19 @@
                             </span>
                         </div>
                     </div>
-                    <img class="card-img-top img-fluid" src="{{event.banner_image.url}}" alt="{{event.title}}">
+                    {% if event.banner_image %}
+                         <img class="card-img-top img-fluid" src="{{event.banner_image.url}}" alt="{{event.title}}">
+                    {% endif %}
                     <div class="card-body bg-dark-secondary text-white">
                         <p class = "card-text">
                             {{event.description|truncatechars_html:100}}
                         </p>
                     </div>
                     <div class = "bg-dark-secondary px-4 pb-2">
-                        <a href="{% url 'event:detail' event.organizer.user.slug event.id %}" class = "small float-left">View more</a>
+                        <a href="{% url 'event:detail' event.organizer.user.slug event.id %}" class = "btn btn-outline-danger btn-sm rounded-pill float-left">View more</a>
+                        {% block volunteer %}
+                            
+                        {% endblock volunteer %}
                         {% if request.user.is_authenticated %}
                             {% if request.user.is_volunteer %}
                             {% if event.saved_events.all.count > 0  %}
@@ -88,9 +93,9 @@
                                 <a href="{% url 'save-event' event.pk %}" class = "btn rounded-pill btn-danger btn-sm float-right">Save Event</a>
                             {% endif %}
                             {%endif%}
-                            {% if not request.user.is_volunteer and request.user == event.organizer.user %}
-                                <a href="{% url 'event:update' event.organizer.user.slug event.id %}" class = "float-right small">Edit</a>
-                            {% endif %} 
+                            {% block edit %}
+                            
+                            {% endblock edit %}
                         {% endif %}
                     </div>
                 </div>
@@ -99,26 +104,5 @@
         </div>
     </div>
 </div>
-
-{% if is_paginated %}
-  <ul class="pagination">
-    {% if page_obj.has_previous %}
-      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in paginator.page_range %}
-      {% if page_obj.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if page_obj.has_next %}
-      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% endif %}
+{% include "paginator.html" %}
 {% endblock main %}

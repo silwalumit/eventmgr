@@ -129,3 +129,6 @@ class SavedEvent(models.Model):
         related_name = "saved_events",
         related_query_name = "saved_event"
     )
+
+    class Meta:
+        ordering = ["-id"]

@@ -1,46 +1,24 @@
-{% extends "base.html" %}
-{% block main %}
-<div class="row shadow m-1 mt-4">
-    <div class="col-12 bg-dark-secondary p-5">
-        <h3 class = "display-4 text-white text-right">
-          Volunteers {% if event %}for {{event.name}}{% endif %} 
-        </h3>
+{% extends "event/detail.html" %}
+{% block volunteers %}
+    <div class="row ">
+        <div class="col-lg-8 col-md-12 m-auto ">
+            <form action="" method = "get">
+                <div class="form-row mx-2 my-2">
+                    <div class="col-md-6">
+                        <input type="text" name = "location" value = "{{request.GET.location}}" placeholder="Search by location name" class = "form-control ">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name = "address" value = "{{request.GET.address}}" placeholder="Search by location full address" class = "form-control ">
+                    </div>
+                </div>
+                <div class="form-row mt-2 mx-2">
+                    <div class="col-auto ml-auto">
+                        <input type="submit" name = "search" value = "Search" class = "btn btn-outline-primary rounded-pill btn-sm"/>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-<div class="row mt-4  m-1">
-  <div class="col-lg-6 col-md-8 col-auto">
-    <div class="card">
-      <table class = "table table-sm table-striped">
-        <thead class = "thead-dark">
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Contact Number</th>
-            <th scope = "col">Location</th>
-            <th scope = "col">Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for volunteer in volunteers_list %}
-            <tr>
-              <td>{{volunteer.name}}</td>
-              <td>{{volunteer.user.name}}</td>
-              <td>{{volunteer.contact_no}}</td>
-              <td>{{volunteer.user.location.name}}</td>
-              <td>{{volunteer.user.location.address}}</td>
-            </tr>
-          {%empty%}
-          <tr>
-            <td colspan="3">There are no volunteers yet</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-{% endblock main %}
-{% block js %}
-
-{% endblock js %}
+  {% include "volunteer/list_inner.html" %}
+  {% include "paginator.html" %}
+{% endblock volunteers %}

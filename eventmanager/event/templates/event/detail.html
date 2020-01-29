@@ -31,7 +31,9 @@
                         </div>
 
                     </div>
-                    <img class="card-img-top img-fluid" src="{{event.banner_image.url}}" alt="{{event.title}}">
+                    {% if event.banner_image %}
+                        <img class="card-img-top img-fluid" src="{{event.banner_image.url}}" alt="{{event.title}}">
+                    {% endif %}
                     <div class="card-body bg-dark-secondary text-white">
 
                         <p class = "card-text text-justify">
@@ -48,11 +50,11 @@
                                     {% if event.saved_events.all.count > 0 %}
                                         <a href="#" class = "disabled btn rounded-pill btn-danger btn-sm">Saved</a> 
                                     {%else%}
-                                        <a href="{% url 'save-event' event.pk %}" class = "btn rounded-pill btn-danger btn-sm">Save Event</a>   
+                                        <a href="{% url 'save-event' event.pk %}" class = "btn rounded-pill btn-outline-danger btn-sm">Save Event</a>   
                                     {% endif %}
                                 {% endif %}
                                 {% if not request.user.is_volunteer and request.user == event.organizer.user %}
-                                    <a href="{% url 'event:update' event.organizer.user.slug event.id %}">Edit</a>
+                                    <a href="{% url 'event:update' event.organizer.user.slug event.id %}" class = "btn btn-outline-danger btn-sm rounded-pill">Edit</a>
                                 {%endif%}
                             {% endif %}
 
@@ -66,7 +68,11 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+{% block volunteers %}
+
+{% endblock volunteers %}
 {% endblock main %}

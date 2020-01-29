@@ -1,0 +1,29 @@
+{% load defaulttags %}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center mb-2">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{page_obj.previous_page_number}}{% if request.GET.title %}&title={{request.GET.title|urlify}}{% endif %}{% if request.GET.org %}&org={{request.GET.org|urlify}}{% endif %}{% if request.GET.tag %}&tag={{request.GET.tag|urlify}}{% endif %}{% if request.GET.location %}location={{request.GET.location|urlify}}{% endif %}" aria-label="Previous">&laquo;</a>
+    </li> 
+    {%else%}
+    <li class="page-item disabled">
+        <a class="page-link " href="#" aria-label="Previous">&laquo;</a>
+    </li>
+    {% endif %}
+    {% for page in paginator.page_range %}
+        <li class = "page-item {% if request.GET.page == page|slugify%}active{%endif%}">
+            <a class = "page-link" href = "?page={{page}}{% if request.GET.title %}&title={{request.GET.title|urlify}}{% endif %}{% if request.GET.org %}&org={{request.GET.org|urlify}}{% endif %}{% if request.GET.tag %}&tag={{request.GET.tag|urlify}}{% endif %}{% if request.GET.location %}location={{request.GET.location|urlify}}{% endif %}" >{{page}}</a>
+        </li>
+    {% endfor %}
+    
+    {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.title %}&title={{request.GET.title|urlify}}{% endif %}{% if request.GET.org %}&org={{request.GET.org|urlify}}{% endif %}{% if request.GET.tag %}&tag={{request.GET.tag|urlify}}{% endif %}{% if request.GET.location %}location={{request.GET.location|urlify}}{% endif %}" aria-label="Next">&raquo;</a>
+        </li>
+    {%else%}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" aria-label="Next">&raquo;</a>
+        </li>
+    {%endif%}
+  </ul>
+</nav>

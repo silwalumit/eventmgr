@@ -218,7 +218,7 @@ class ActivateAccount(View):
 
 class ChangePassword(LoginRequiredMixin, AjaxableResponseMixin,PasswordChangeView):
   
-  success_url = reverse_lazy("home")
+  success_url = reverse_lazy("user:dashboard")
   form_class = CustomPasswordChangeForm
   ajax_template_name = "header.html"
   template_name = "registration/change_password.html"
@@ -239,6 +239,10 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
         'user': UserProfile,
         'location': LocationForm
     }
+    prefix = {
+        'user':'user',
+        'location':'location',
+    }
     success_url = reverse_lazy("user:settings")
 
     def dispatch(self, request, *args, **kwargs):
@@ -250,11 +254,17 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
 
         if self.user.is_volunteer:
             self.form_classes['volunteer'] = VolunteerProfileForm
+            self.prefix['volunteer'] = 'volunteer'
             self.template_name = "volunteer/profile.html"
         else:
             self.form_classes.update({
                 'organizer': OrganizerCreationForm,
                 'contact': ContactsForm
+            })
+
+            self.prefix.update({
+                'organizer':'organizer',
+                'contact':'contact'
             })
             self.template_name = "organizer/profile.html"
 
@@ -289,6 +299,7 @@ class EditProfile(LoginRequiredMixin, MultiFormsView):
         else:
             organizer = forms['organizer'].save()
             contact = forms['contact'].save()
+
         messages.success(self.request, "Profile successfully updated.")
         return super().form_valid(forms)
 
@@ -355,11 +366,35 @@ class OrganizerList(ListView):
     model = Organizer
     template_name = "organizer/list.html"
     context_object_name = "organizers"
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET
+        qs = super().get_queryset()
+        if query:
+            return self.filter(qs, query)
+        else:
+            return qs 
+
+    def filter(self, qs ,query):
+        q = {}
+
+        location = query.get('location')
+        address = query.get('address')
+
+        if location:
+            q["user__location__name"] = location
+
+        if address:
+            q["user__location__address"] = address
+
+        return qs.filter(**q) if q else qs
 
 class VolunteerList(LoginRequiredMixin, ListView):
     model = Volunteer
     template_name = "volunteer/list.html"
     context_object_name = "volunteers_list"
+    paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_volunteer:
@@ -367,10 +402,33 @@ class VolunteerList(LoginRequiredMixin, ListView):
         else:
             return HttpResponseRedirect(reverse("home"))
 
+    def get_queryset(self):
+        query = self.request.GET
+        qs = super().get_queryset()
+        if query:
+            return self.filter(qs, query)
+        else:
+            return qs 
+
+    def filter(self, qs ,query):
+        q = {}
+
+        location = query.get('location')
+        address = query.get('address')
+
+        if location:
+            q["user__location__name"] = location
+
+        if address:
+            q["user__location__address"] = address
+
+        return qs.filter(**q) if q else qs
+
 class MyVolunteers(LoginRequiredMixin, ListView):
     model = Volunteer
     template_name = "organizer/my_volunteers.html"
     context_object_name = "volunteers_list"
+    paginate_by = 10
     
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_volunteer:
@@ -380,6 +438,69 @@ class MyVolunteers(LoginRequiredMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        query = self.request.GET
+        qs = super().get_queryset().filter(
             subscription__organizer = self.organizer
         )
+        if query:
+            return self.filter(qs, query)
+        else:
+            return qs 
+
+    def filter(self, qs ,query):
+        q = {}
+
+        location = query.get('location')
+        address = query.get('address')
+
+        if location:
+            q["user__location__name"] = location
+
+        if address:
+            q["user__location__address"] = address
+
+        return qs.filter(**q) if q else qs
+
+from django.views.generic import View
+class SubscribeOrganizer(LoginRequiredMixin, View):
+
+    @transaction.atomic
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        if pk:
+            organizer = Organizer.objects.filter(id = pk)
+        else:
+            organizer = None
+
+        if request.user.is_volunteer and organizer.exists():
+            obj, created = Subscription.objects.get_or_create(
+                organizer = organizer.get(),
+                volunteer = request.user.volunteer
+            )
+
+            request.user.volunteer.organizers.add(organizer.get())
+            request.user.volunteer.save()
+            return HttpResponseRedirect(reverse("user:dashboard"))
+        else:
+            return HttpResponseRedirect(reverse("organizers"))
+
+from django.views.generic import DeleteView
+class DeleteSubscription(LoginRequiredMixin, DeleteView):
+    model = Subscription
+    success_url = reverse_lazy("user:dashboard")
+
+class SubscribedOrganization(LoginRequiredMixin, ListView):
+    model = Subscription
+    template_name = "volunteer/subscriptions.html"
+    context_object_name = "subscriptions"
+    paginate_by = 5
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_volunteer:
+            self.volunteer = request.user.volunteer
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse("home"))
+
+    def get_queryset(self):
+        return super().get_queryset().filter(volunteer = self.volunteer)
