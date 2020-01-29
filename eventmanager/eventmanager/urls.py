@@ -30,7 +30,7 @@ from users.views import (
 urlpatterns = [
     path('', RedirectView.as_view(url = 'events/', permanent = True), name = "home"),
     path('accounts/', include('users.urls', namespace = "user")),
-    
+    path('comments', include('comments.urls', namespace = "comments")),
     path("volunteers/", VolunteerList.as_view(), name = "volunteers"),
     path("organizers/", OrganizerList.as_view(), name = "organizers"),
     path("organizers/<int:pk>/subscribe/", SubscribeOrganizer.as_view(), name = "subscribe"),
@@ -41,6 +41,7 @@ urlpatterns = [
     path('events/saved/<int:pk>/delete/', DeleteSavedEvent.as_view(), name= "delete-saved-event"),
     path('<slug:slug>/events/', include('event.urls', namespace = "event")),
     
+
     path('admin/', admin.site.urls),
 
 ]

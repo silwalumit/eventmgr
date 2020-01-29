@@ -10,10 +10,11 @@ from django.views.generic import(
     DetailView,
 )
 
-from django.views.generic import (
+from django.views.generic.edit import (
     CreateView,
     UpdateView,
     FormView,
+    FormMixin,
 )
 
 from core.views import MultiFormsView
@@ -21,6 +22,8 @@ from core.views import MultiFormsView
 from .forms import *
 from locations.forms import *
 import code 
+from comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 class CreateEvent(LoginRequiredMixin, MultiFormsView):
     template_name = "event/add.html"
@@ -172,14 +175,63 @@ class MyEvents(LoginRequiredMixin, AllEvents):
         else:
             return qs
 
-class EventDetailView(DetailView):
+from comments.forms import CommentForm
+
+class EventDetailView(FormMixin, DetailView):
+    form_class = CommentForm
     model = Event
     template_name = "event/detail.html"
     context_object_name = "event"
+    parent_id = None
+    parent_obj = None
 
+    def get_form_kwargs(self):
+        self.object = self.get_object()
+        self.initial = {
+            "content_type": self.object.get_content_type,
+            "object_id":self.object.id
+        }
+        return super().get_form_kwargs()
+    def get(self, request, *args, **kwargs):
+        self.extra_context = {
+            "comments":self.get_object().comments
+        }
+        return super().get(request, *args, **kwargs)
+        
     def get_object(self):
         pk = self.kwargs.get(self.pk_url_kwarg)
         return self.model.objects.get(id = pk)
+
+    def post(self, request, *args, **kwargs):
+        self.parent_id = request.POST.get("parent_id")
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return super().form_valid()
+
+    def form_valid(self, form):
+        c_type = form.cleaned_data.get("content_type")
+       
+        content_type = self.get_object().get_content_type
+        obj_id = form.cleaned_data.get("object_id")
+        content_data = form.cleaned_data.get('content')
+
+        if self.parent_id:
+            parent_qs = Comment.objects.filter(id = self.parent_id)
+
+            if parent_qs.exists() and parent_qs.count() == 1:
+                self.parent_obj = parent_qs.first()
+
+        new_comment, created = Comment.objects.get_or_create(
+            user = self.request.user,
+            content_type = content_type,
+            object_id = obj_id,
+            content = content_data,
+            parent = self.parent_obj,
+        )
+
+        return HttpResponseRedirect(reverse("event:detail" ,args=[self.get_object().organizer.user.slug,self.get_object().id]))
 
 class SavedEventsView(LoginRequiredMixin, ListView):
     model = SavedEvent

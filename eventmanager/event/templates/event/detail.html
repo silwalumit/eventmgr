@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load defaulttags %}
+{% load crispy_forms_tags %}
 {% block main %}
 <div class="row ">
     <div class="col-lg-8 col-md-12 m-auto">
         <div class="row mt-2 mb-2">
             <div class="col-12 d-flex align-items-strech">
                 <div class="card border-0 w-100">
-
                     <div class="card-header bg-dark-primary text-white">
                         <h5>
                             {{event.title}}
@@ -68,7 +68,149 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col-12 ">
+                <h5 class = "lead">Comments</h5>
+            </div>
+            {% if request.user.is_authenticated %}
+            <div class="col-12">
+                <div class="media">
+                    {% if request.user.avatar %}
+                        <a class="align-self-start " href="#">
+                          <img class="media-object rounded-circle" src="{{request.user.avatar.url}}" alt="profile">
+                        </a>
+                    {% endif %}
+                    <div class="media-body mx-2">
+                        <div class="card bg-dark-primary">
+                            <div class="card-header bg-dark-primary border-0">
+                                <h5 class="text-uppercase text-muted">
+                                    {% if request.user.is_volunteer %}
+                                        {{request.user.volunteer.name}}
+                                    {%else%}
+                                        {{request.user.organizer.name}}    
+                                    {% endif %}
+                                    
+                                </h5>
+                            </div>
+                            <div class="card-body py-0">
+                                <form action="" method = "post" class= "mb-2">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class = "col-12">
+                                            {{form.content_type}}
+                                            {{form.object_id}}
+                                            {{form.content|as_crispy_field}}
+                                        </div>
+                                        <div class="col-auto ml-auto">
+                                            <input type="submit" name = "post-comment" value = "Post Comment" class = "btn btn-outline-primary btn-sm rounded-pill">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
 
+
+        <div class="row mt-2 mb-2">
+            <div class="col-12 ">
+                <ul class = "list-unstyled">
+                    {% for comment in comments %}
+                    <li class = "media mt-2">
+                        {% if comment.user.avatar %}
+                            <a class="align-self-start " href="#">
+                              <img class="media-object rounded-circle" src="{{comment.user.avatar.url}}" alt="profile">
+                            </a>
+                        {% endif %}
+                        <div class="media-body mx-2">
+                            <div class="card bg-dark-primary">
+                                <div class=" card-header bg-dark-primary border-0">
+                                    <h4 class="text-uppercase text-muted float-left">
+                                    {% if comment.user.is_volunteer %}
+                                        {{comment.user.volunteer.name}}
+                                    {%else%}
+                                        {{comment.user.organizer.name}}    
+                                    {% endif %}
+                                    </h4>
+                                    <span class = "float-right small text-muted">
+                                        {{comment.timestamp|timesince}} ago
+                                    </span>
+                                </div>
+                                <div class="card-body py-0">
+                                    <p class="card-text">
+                                        {{comment.content}}
+                                    </p>
+                                    <div class = "my-2">
+                                        <a class="btn btn-sm btn-outline-info rounded-pill text-uppercase" data-toggle="collapse" href="#reply-form-{{forloop.counter}}" id="reply">
+                                        Reply
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-danger  rounded-pill text-uppercase" data-toggle="collapse" href="#reply-{{forloop.counter}}">{{comment.children.all.count}} Comments</a>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class = "collapse" id = "reply-form-{{forloop.counter}}">
+                                
+                                <div class="card bg-dark-primary">
+                              
+                                    <div class="card-body py-0">
+                                        <form action="" method = "post" class= "mb-2">
+                                            {% csrf_token %}
+                                            <div class="form-row">
+                                                <div class = "col-12">
+                                                    <input type = "hidden" name = "parent_id" value = "{{comment.id}}" />
+                                                    {{form.content_type}}
+                                                    {{form.object_id}}
+                                                    {{form.content|as_crispy_field}}
+                                                </div>
+                                                <div class="col-auto ml-auto">
+                                                    <input type="submit" name = "post-comment" value = "Reply" class = "btn btn-outline-primary btn-sm rounded-pill">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div> 
+                                </div>
+                            </div>   
+                            <ul class = "list-unstyled collapse w-100" id = "reply-{{forloop.counter}}">
+                                 {% for comment in comment.children %}
+                                <li class = "media mt-2 w-100">
+                                    {% if comment.user.avatar %}
+                                        <a class="align-self-start " href="#">
+                                          <img class="media-object rounded-circle" src="{{comment.user.avatar.url}}" alt="profile">
+                                        </a>
+                                    {% endif %}
+                                    <div class="media-body mx-2">
+                                        <div class="card bg-dark-primary">
+                                            <div class="card-header bg-dark-primary border-0">
+                                                <h4 class="text-uppercase text-muted float-left">
+                                                {% if comment.user.is_volunteer %}
+                                                    {{comment.user.volunteer.name}}
+                                                {%else%}
+                                                    {{comment.user.organizer.name}}    
+                                                {% endif %}
+                                                </h4>
+                                                <span class = "float-right small text-muted">
+                                                    {{comment.timestamp|timesince}} ago
+                                                </span>
+                                            </div>
+                                            <div class="card-body py-0">
+                                                <p class="card-text">{{comment.content}}</p>
+
+                                            </div> 
+                                        </div>              
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>             
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
         </div>
     </div>
 </div>

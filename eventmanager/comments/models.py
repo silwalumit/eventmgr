@@ -15,7 +15,6 @@ class Comment(models.Model):
     id = models.BigAutoField(primary_key=True, verbose_name='ID')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default = 1, on_delete = models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete = models.CASCADE)
-    # post = models.ForeignKey(Post, on_delete = models.CASCADE)
     
     content = models.TextField()
     object_id = models.PositiveIntegerField()

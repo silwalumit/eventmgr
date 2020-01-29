@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 from users.models import Organizer, Volunteer
 def upload_location(instance, filename):
@@ -71,7 +73,14 @@ class Event(models.Model):
         on_delete = models.PROTECT,
         null = True
     )
-    
+    @property
+    def comments(self):
+        query_set = Comment.objects.filter_by_instance(self)
+        return query_set
+    @property
+    def get_content_type(self):
+        return ContentType.objects.get_for_model(self.__class__)
+
     updated_on = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
