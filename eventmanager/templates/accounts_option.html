@@ -19,6 +19,8 @@
             {% if request.user.is_authenticated and not request.user.is_volunteer %}
                 <a href="{% url 'event:add' request.user.slug %}" class="dropdown-item">Add Event</a>
                 <a href="{% url 'event:my-events' request.user.slug %}" class="dropdown-item">My Events</a>
+                <a href="{% url 'user:my-volunteers' %}" class="dropdown-item">My Volunteers</a>
+
             {% endif %}
             <a class="dropdown-item" href="{% url 'user:settings' %}">
               Profile Settings

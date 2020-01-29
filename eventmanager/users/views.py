@@ -426,7 +426,7 @@ class VolunteerList(LoginRequiredMixin, ListView):
 
 class MyVolunteers(LoginRequiredMixin, ListView):
     model = Volunteer
-    template_name = "organizer/my_volunteers.html"
+    template_name = "volunteer/list.html"
     context_object_name = "volunteers_list"
     paginate_by = 10
     

@@ -18,7 +18,8 @@ urlpatterns = [
         name = "activate"
     ),
     path('dashboard/', Dashboard.as_view(), name = "dashboard"),
-    
+    path('dashboard/my-volunteers/', MyVolunteers.as_view(), name = "my-volunteers"),
+
     path('dashboard/saved-events/', SavedEventsView.as_view(), name = "saved-events"),
     path('dashboard/subscriptions/', SubscribedOrganization.as_view(), name = "subscriptions"),
 

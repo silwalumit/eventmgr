@@ -24,7 +24,7 @@
                 <a href = "#" class = "disabled btn btn-sm rounded-pill btn-danger float-right">Subscribed</a>
                 <form action="{% url 'delete-subscription' subscription.id %}" method = "post">
                     {% csrf_token %}
-                    <button type = "submit" class = "float-right btn btn-outline-danger btn-sm rounded-pill mx-2">Delete</button>
+                    <button type = "submit" class = "float-right btn btn-outline-danger btn-sm rounded-pill mx-2">Unsubscribe</button>
                 </form>
             </div>
         </div>

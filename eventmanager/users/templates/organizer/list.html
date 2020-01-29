@@ -102,7 +102,8 @@
                       </a>
                       {% if request.user.is_authenticated and  request.user.is_volunteer %}
                         {% if organizer.subscribers.all.count > 0 %}
-                        <a href="#" class = "disabled float-right btn btn-danger btn-sm rounded-pill">Subscribed</a>  
+                        <a href="#" class = "disabled float-right btn btn-danger btn-sm rounded-pill">Subscribed</a>
+                         
                         {%else%}
                         <a href="{% url 'subscribe' organizer.id %}" class = "float-right btn btn-outline-danger btn-sm rounded-pill">Subscribe</a>  
                         {% endif %}
