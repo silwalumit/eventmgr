@@ -96,7 +96,7 @@ DATABASES = {
 #             'read_default_file':'/etc/mysql/my.cnf'
 #         },
 #     }
-}
+# }
 #
 # DATABASES = {
 #     'default': {
